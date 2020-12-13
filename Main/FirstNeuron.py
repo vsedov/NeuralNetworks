@@ -37,12 +37,6 @@ def firstNeuron() -> np:
     # this would be the first output for first neuron that we made .
 
     # For the most part
-    """ 
-    we break down every step : 
-    input = Inputs for the user . 
-    weights, in this case we have some sort of line so this output will be the input for the next layer 
-    bias is the value that we have atm . 
-    """
 
 
 def main() -> None:
@@ -52,3 +46,11 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+    """
+    we break down every step :
+    input = Inputs for the user .
+    weights, in this case we have some sort of line so this output will be the
+    input for the next layer
+    bias is the value that we have atm .
+    """
