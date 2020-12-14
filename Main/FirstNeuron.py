@@ -10,7 +10,6 @@ __author__ = "Viv Sedov"
 __email__ = "viv.sb@hotmail.com"
 
 import better_exceptions
-import numpy as np
 from frosch import hook
 from pprintpp import pprint as pp
 
@@ -18,7 +17,7 @@ better_exceptions.hook()
 hook()
 
 
-def firstNeuron() -> np:
+def firstNeuron() -> int:
     # MultiLyaer perceptron model :  For the first level
     # Words can be long .
     # Every neuron has a unique connection to a previous connection .
@@ -35,7 +34,6 @@ def firstNeuron() -> np:
         + biases
     )
     pp(output)
-    pp(np.dot(inputs, weights) + 2)
     # this would be the first output for first neuron that we made .
 
     # For the most part
