@@ -23,7 +23,8 @@ def firstNeuron() -> int:
     # Every neuron has a unique connection to a previous connection .
     # The output
     inputs = [1, 2, 3, 2.5]  # Unique inputs and outputs from previous layer
-    weights = [0.2, 0.8, -0.5, 1]  # Each input, and a weight for each input
+    weights = [[0.2, 0.8, -0.5, 1], [0.4, 0.3, 0.1, 10]]
+
     biases = 2  # is the ammount that we have -
 
     output = (
