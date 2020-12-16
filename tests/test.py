@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 # vim:fenc=utf-8
 #
-# Copyright © 2020-12-14 Viv Sedov 
+# Copyright © 2020-12-14 Viv Sedov
 #
-# File Name: test.py  
+# File Name: test.py
 # Distributed under terms of the MIT license.
 __author__ = "Viv Sedov"
 __email__ = "viv.sb@hotmail.com"
@@ -17,7 +17,7 @@ hook()
 
 
 def main() -> None:
-    
+
     pass
 
 
