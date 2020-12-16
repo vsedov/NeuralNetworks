@@ -53,7 +53,7 @@ def threeNeurons() -> list:
     print(output)
 
 
-def betterVersionAbove():
+def betterVersionAbove() -> list:
     inputs = [1, 2, 3, 2.5]
 
     weights1 = [
@@ -80,7 +80,7 @@ def betterVersionAbove():
     print(Layers_of_outoputs)
 
 
-def myVersion():
+def myVersion() -> list:
     inputs = [1, 2, 3, 2.5]
 
     weights1 = [
@@ -103,6 +103,26 @@ def myVersion():
             output
         )  # this would have to be within its own given Layers_of_outoputs
     print(container)
+    print("\n")
+    tester()
+
+
+def tester() -> int:
+
+    inputs = [1, 2, 3, 2.5]
+
+    weights1 = [
+        [0.2, 0.8, -0.5, 1],
+        [0.5, -0.91, 0.26, -0.5],
+        [-0.26, -0.27, 0.17, 0.87],
+    ]
+
+    bias = [2, 3, 0.5]
+    container = []
+
+    for x, y in zip(weights1, bias):
+
+        print(x, y)
 
 
 def npParser(input, weights1, weights2, weights3, biases1, biases2, biases3):
