@@ -124,8 +124,8 @@ def tester() -> int:
 
         print(x, y)
 
-        for i ,z in zip(inputs,x):
-            output += i*z
+        for i, z in zip(inputs, x):
+            output += i * z
         output += y
         container.append(output)
     print(container)
