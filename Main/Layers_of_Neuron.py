@@ -80,6 +80,31 @@ def betterVersionAbove():
     print(Layers_of_outoputs)
 
 
+def myVersion():
+    inputs = [1, 2, 3, 2.5]
+
+    weights1 = [
+        [0.2, 0.8, -0.5, 1],
+        [0.5, -0.91, 0.26, -0.5],
+        [-0.26, -0.27, 0.17, 0.87],
+    ]
+
+    bias = [2, 3, 0.5]
+    container = []
+
+    for x, y in zip(weights1, bias):
+        output = 0
+        for inputVar, weight in zip(inputs, x):
+            output += inputVar * weight
+            print(output)
+        output += y
+
+        container.append(
+            output
+        )  # this would have to be within its own given Layers_of_outoputs
+    print(container)
+
+
 def npParser(input, weights1, weights2, weights3, biases1, biases2, biases3):
 
     dotVector1 = np.dot(input, weights1) + biases1
@@ -93,6 +118,9 @@ def main() -> None:
     threeNeurons()
     print("\n")
     betterVersionAbove()
+
+    print("\n" * 2)
+    myVersion()
 
 
 if __name__ == "__main__":
