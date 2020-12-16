@@ -53,6 +53,33 @@ def threeNeurons() -> list:
     print(output)
 
 
+def betterVersionAbove():
+    inputs = [1, 2, 3, 2.5]
+
+    weights1 = [
+        [0.2, 0.8, -0.5, 1],
+        [0.5, -0.91, 0.26, -0.5],
+        [-0.26, -0.27, 0.17, 0.87],
+    ]
+
+    bias = [2, 3, 0.5]
+
+    # Output of Current layer
+    Layers_of_outoputs = []
+
+    # This splits each neuron weight with bias
+    for neuronWeights, neuronBias in zip(weights1, bias):
+        # Zerored output for given neuron
+        neuronOutput = 0
+        # for each input there is an array we linjk too
+        for nInput, weight in zip(inputs, neuronWeights):
+            neuronOutput += nInput * weight
+        neuronOutput += neuronBias
+        Layers_of_outoputs.append(neuronOutput)
+
+    print(Layers_of_outoputs)
+
+
 def npParser(input, weights1, weights2, weights3, biases1, biases2, biases3):
 
     dotVector1 = np.dot(input, weights1) + biases1
@@ -64,6 +91,8 @@ def npParser(input, weights1, weights2, weights3, biases1, biases2, biases3):
 
 def main() -> None:
     threeNeurons()
+    print("\n")
+    betterVersionAbove()
 
 
 if __name__ == "__main__":
