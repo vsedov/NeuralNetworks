@@ -124,7 +124,7 @@ def tester() -> int:
     for x, y in zip(weights1, bias):
 
         print(x, y)
-        output = 0  # so output has to be defined in this case
+
         for i, z in zip(inputs, x):
             output += i * z
         output += y
