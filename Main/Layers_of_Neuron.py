@@ -53,6 +53,10 @@ def threeNeurons() -> list:
     print(output)
     print("test")
 
+    # Note you cant do multi buffer
+    print("{}".format(biases3))
+    # I wanted to see how this code would end up looking like
+
 
 def betterVersionAbove() -> list:
     inputs = [1, 2, 3, 2.5]
