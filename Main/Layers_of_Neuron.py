@@ -51,6 +51,7 @@ def threeNeurons() -> list:
         + biases3,
     ]
     print(output)
+    print("test")
 
 
 def betterVersionAbove() -> list:
