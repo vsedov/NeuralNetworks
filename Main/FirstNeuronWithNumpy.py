@@ -24,6 +24,11 @@ def firstNeuron() -> np:
     biases = 2
     pp(np.dot(inputs, weights) + biases)
 
+    print("Those values that we have here are defined by ")
+    print("{}".format(inputs))
+
+def secondNeuron() -> np:
+    pass 
 
 def main() -> None:
 
