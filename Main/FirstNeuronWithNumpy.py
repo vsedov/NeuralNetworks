@@ -27,8 +27,10 @@ def firstNeuron() -> np:
     print("Those values that we have here are defined by ")
     print("{}".format(inputs))
 
+
 def secondNeuron() -> np:
-    pass 
+    pass
+
 
 def main() -> None:
 
