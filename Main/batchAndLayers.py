@@ -94,10 +94,9 @@ def classer():
     layer2 = Layer_Dense(5, 6)
 
     layer1.forward(X)
-    # print(layer1.outpt)
+    print(layer1.output)
 
     layer2.forward(layer1.output)
-    print(layer2.output)
 
 
 class Layer_Dense:  # making a new neural networks := Weights First -1<= x <=1
