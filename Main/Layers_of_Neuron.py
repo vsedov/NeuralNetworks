@@ -15,7 +15,6 @@ from frosch import hook
 from pprintpp import pprint as pp
 
 
-
 def threeNeurons() -> list:
     inputs = [1, 2, 3, 2.5]
 
@@ -119,6 +118,7 @@ def tester() -> int:
         [0.5, -0.91, 0.26, -0.5],
         [-0.26, -0.27, 0.17, 0.87],
     ]
+
 
 def npParser(input, weights1, weights2, weights3, biases1, biases2, biases3):
 
