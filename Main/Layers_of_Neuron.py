@@ -14,8 +14,6 @@ import numpy as np
 from frosch import hook
 from pprintpp import pprint as pp
 
-better_exceptions.hook()
-hook()
 
 
 def threeNeurons() -> list:
@@ -122,20 +120,6 @@ def tester() -> int:
         [-0.26, -0.27, 0.17, 0.87],
     ]
 
-    bias = [2, 3, 0.5]
-    container = []
-
-    for x, y in zip(weights1, bias):
-
-        print(x, y)
-
-        for i, z in zip(inputs, x):
-            output += i * z
-        output += y
-        container.append(output)
-    print(container)
-
-
 def npParser(input, weights1, weights2, weights3, biases1, biases2, biases3):
 
     dotVector1 = np.dot(input, weights1) + biases1
@@ -156,9 +140,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-    """ 
-    More on a personal note, i dont think i would of done this method, just because 
-    of the lack of experence i had with this at the start - > Looking at it, i think its 
-    not that bad of a method after all . 
-    """

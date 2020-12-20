@@ -19,16 +19,27 @@ hook()
 
 
 def firstNeuron() -> np:
-    inputs = [1, 2, 3, 2.5]
-    weights = [0.2, 0.8, -0.5, 1]
-    biases = 2
-    pp(np.dot(inputs, weights) + biases)
+    # MultiLyaer perceptron model :  For the first level
+    # Words can be long .
+    # Every neuron has a unique connection to a previous connection .
+    # The output
+    inputs = [1, 2, 3, 2.5]  # Unique inputs and outputs from previous layer
+    weights = [0.2, 0.8, -0.5, 1]  # Each input, and a weight for each input
+    biases = 2  # is the ammount that we have -
 
-    print("Those values that we have here are defined by ")
-    print("{}".format(inputs))
+    output = (
+        inputs[0] * weights[0]
+        + inputs[1] * weights[1]
+        + inputs[2] * weights[2]
+        + inputs[3] * weights[3]
+        + biases
+    )
+    pp(output)
+    pp(np.dot(inputs, weights) + 2)
+    # this would be the first output for first neuron that we made .
 
-def secondNeuron() -> np:
-    pass 
+    # For the most part
+
 
 def main() -> None:
 
@@ -37,3 +48,11 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+    """
+    we break down every step :
+    input = Inputs for the user .
+    weights, in this case we have some sort of line so this output will be the
+    input for the next layer
+    bias is the value that we have atm .
+    """
