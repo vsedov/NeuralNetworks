@@ -29,7 +29,20 @@ class Dense_Layer:
         )  # This is just random generated results
         self.biases = np.zeros((1, n_neurons))
 
+    @staticmethod
     def forall(self, inputs: list) -> np:
+        self.outputs = np.dot(inputs, self.weights) + self.biases
+
+
+class With_Weights:
+    def __init__(self, weights: list):
+        self.weights = np.array(weights).T
+        self.biases = np.zeros(
+            (1, len(self.weights[0]))
+        )  # In this case we woudl force this
+
+    @staticmethod
+    def forward(self, inputs: list) -> np:
         self.outputs = np.dot(inputs, self.weights) + self.biases
 
 
@@ -47,16 +60,24 @@ def main() -> np:
         [-0.26, -0.27, 0.17, 0.87],
     ]
 
-    x = 10  # This can be any other value or number that you want
-    layer_1 = Dense_Layer(4, x)
+    layer_withWeights = With_Weights(W_1)
+    layer_withWeights.forward(X)
 
-    layer_1.forall(X)
-    # print(layer_1.outputs)
+    print(layer_withWeights.outputs)
 
-    layer_2 = Dense_Layer(x, 2)  # This has to be what ever it had before
+    # This would be continue onwards, with what ever values that you had .
 
-    layer_2.forall(layer_1.outputs)
-    print(layer_2.outputs)
+
+#     x = 10  # This can be any other value or number that you want
+#     layer_1 = Dense_Layer(4, x)
+
+#     layer_1.forall(X)
+#     # print(layer_1.outputs)
+
+#     layer_2 = Dense_Layer(x, 2)  # This has to be what ever it had before
+
+#     layer_2.forall(layer_1.outputs)
+#     print(layer_2.outputs)
 
 
 if __name__ == "__main__":
