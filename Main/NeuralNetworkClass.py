@@ -29,7 +29,6 @@ class Dense_Layer:
         )  # This is just random generated results
         self.biases = np.zeros((1, n_neurons))
 
-    @staticmethod
     def forall(self, inputs: list) -> np:
         self.outputs = np.dot(inputs, self.weights) + self.biases
 
@@ -41,7 +40,6 @@ class With_Weights:
             (1, len(self.weights[0]))
         )  # In this case we woudl force this
 
-    @staticmethod
     def forward(self, inputs: list) -> np:
         self.outputs = np.dot(inputs, self.weights) + self.biases
 
@@ -59,7 +57,8 @@ def main() -> np:
         [0.5, -0.91, 0.26, -0.5],
         [-0.26, -0.27, 0.17, 0.87],
     ]
-
+    # As some infomation, most times you dont really hold the weights in an arr 
+    
     layer_withWeights = With_Weights(W_1)
     layer_withWeights.forward(X)
 
@@ -81,5 +80,5 @@ def main() -> np:
 
 
 if __name__ == "__main__":
-    hook(theme="fruity")
+    # hook(theme="fruity")
     main()
