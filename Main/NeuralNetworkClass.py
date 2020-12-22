@@ -57,8 +57,8 @@ def main() -> np:
         [0.5, -0.91, 0.26, -0.5],
         [-0.26, -0.27, 0.17, 0.87],
     ]
-    # As some infomation, most times you dont really hold the weights in an arr 
-    
+    # As some infomation, most times you dont really hold the weights in an arr
+
     layer_withWeights = With_Weights(W_1)
     layer_withWeights.forward(X)
 
