@@ -15,10 +15,17 @@ from frosch import hook
 better_exceptions.hook()
 hook()
 
+import sys
+
+
+def is_venv():
+    return hasattr(sys, "real_prefix") or (
+        hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix
+    )
+
 
 def main() -> None:
-
-    pass
+    print(is_venv())
 
 
 if __name__ == "__main__":
