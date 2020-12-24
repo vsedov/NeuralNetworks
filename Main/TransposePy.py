@@ -22,12 +22,13 @@ class DensLayer:
             (1, nNeurons)
         )  # Shape is 1 x By how ever many Neruons that you have .
         # This would have to be Shape as a parameter ie, this would have to be a tuple . Parem are the shape it self ....
+        self.output = None
 
-    def forward(self, inputs):
+    def forward(self, inputs: np) -> np.dot:
         self.output = np.dot(inputs, self.weights) + self.bias
 
 
-def tester() -> np:
+def tester() -> DensLayer:
     X = [
         [1, 2, 3, 2.5],
         [2, 5, -1, 2],
