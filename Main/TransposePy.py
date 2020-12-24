@@ -11,21 +11,41 @@ __email__ = "viv.sb@hotmail.com"
 import numpy as np
 from frosch import hook
 
+np.random.seed(0)
 
-def tester():
-    inputs = [[1, 2, 3, 2.5], [2, 5, -1, 2], [-1.5, 2.7, 3.3, -0.8]]
-    weights = [
-        [0.2, 0.8, -0.5, 1],
-        [0.5, -0.91, 0.26, -0.5],
-        [-0.26, -0.27, 0.17, 0.87],
-    ]
 
-    bias = [2, 3, 0.5]
+class DensLayer:
+    def __init__(self, nInputs, nNeurons):
+        # We dont have to transpose everytime, when you ahve control ove rthe first section self.weights = 0.01 * np.random.randn( nInputs, nNeurons)  # This creates the shape that we want to pass , Size of input : Size of Neurons
+        self.weights = 0.10 * np.random.randn(nInputs, nNeurons)
+        self.bias = np.zeros(
+            (1, nNeurons)
+        )  # Shape is 1 x By how ever many Neruons that you have .
+        # This would have to be Shape as a parameter ie, this would have to be a tuple . Parem are the shape it self ....
 
-    print(np.dot(inputs, np.array(weights).T) + bias)
+    def forward(self, inputs):
+        self.output = np.dot(inputs, self.weights) + self.bias
 
-    # If you got rid fo the transpose for this laayer, you would end up getting an error .
-    # Which is rather annoying if oyu ask me, but yeah, i guess thats how it is in theend
+
+def tester() -> np:
+    X = [
+        [1, 2, 3, 2.5],
+        [2, 5, -1, 2],
+        [-1.5, 2.7, 3.3, -0.8],
+    ]  # Assuming this is the input data
+    # Nneurons is what ever you want
+
+    layer1 = DensLayer(4, 5)
+    layer2 = DensLayer(5, 2)
+    layer3 = DensLayer(2, 10)
+
+    layer1.forward(X)
+
+    layer2.forward(layer1.output)
+
+    layer3.forward(layer2.output)
+
+    print(layer3.output)
 
 
 def main() -> None:
@@ -34,5 +54,10 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    hook(theme="fruity")
+    hook()
     main()
+
+    """
+    Smaller values are better, and teh infomation, have a rand between neg 1 and pos 1
+    the weights are, amount of inputs, so like say you have some input,  and you have nNeurons for that input . 
+   """
