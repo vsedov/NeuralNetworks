@@ -33,20 +33,36 @@ class ActivationReLU:
         self.outputs = np.maximum(0, inputs)
 
 
-def main() -> np:
+class ActivationSoftMax:
+    def forward(self, inputs):
+        expVal = np.exp(
+            inputs - np.max(inputs, axis=1, keepdims=True)
+        )  # Cool this works - Take Value away and keeep that dimension .
+        # This prevents overflow error
 
-    inputs = [0, 2, -1, 3.3, -2.7, 1.1, 2.2]
+        probability = expVal / np.sum(expVal, axis=1, keepdims=True)
+
+        self.outputs = probability
+
+
+def main() -> np:
 
     X, y = spiral_data(samples=100, classes=3)  # This is your data
 
-    layer1 = DenseLayer(2, 5)
+    dense1 = DenseLayer(2, 3)
     activation1 = ActivationReLU()
-    layer1.forward(X)
-    activation1.forward(layer1.outputs)
+    dense2 = DenseLayer(
+        3, 3
+    )  # The output layer is what ever or how ever many classes that you have
 
-    pp(activation1.outputs[:5])  # When optimiser does things, ti just does it for you .
-    print("\n")
-    pp(activation1.outputs)  # When optimiser does things, ti just does it for you .
+    activation2 = ActivationSoftMax()
+
+    dense1.forward(X)
+    activation1.forward(dense1.outputs)
+    dense2.forward(activation1.outputs)
+    activation2.forward(dense2.outputs)
+
+    pp([x := activation2.outputs[:5], type(x)])
 
 
 if __name__ == "__main__":
