@@ -16,12 +16,10 @@ from pprintpp import pprint as pp
 
 class DenseLayer:
     def __init__(self, n_inputs: int, n_neurons: int):
-        self.weights = 0.10 * np.random.randn(
-            n_inputs, n_neurons
-        )  # This is just random generated results
-        self.biases = np.zeros(
-            (1, n_neurons)
-        )  # If it is dying, but you can change that to a non zero
+        self.weights = 0.10 * np.random.randn(n_inputs, n_neurons)
+        # This is just random generated results
+        self.biases = np.zeros((1, n_neurons))
+        # If it is dying, but you can change that to a non zero
 
     def forward(self, inputs: list) -> np:
         self.outputs = np.dot(inputs, self.weights) + self.biases
@@ -34,10 +32,9 @@ class ActivationReLU:
 
 
 class ActivationSoftMax:
-    def forward(self, inputs):
-        expVal = np.exp(
-            inputs - np.max(inputs, axis=1, keepdims=True)
-        )  # Cool this works - Take Value away and keeep that dimension .
+    def forward(self, inputs) -> np:
+        expVal = np.exp(inputs - np.max(inputs, axis=1, keepdims=True))
+        # Cool this works - Take Value away and keeep that dimension .
         # This prevents overflow error
 
         probability = expVal / np.sum(expVal, axis=1, keepdims=True)
@@ -45,15 +42,14 @@ class ActivationSoftMax:
         self.outputs = probability
 
 
-def main() -> np:
+def main() -> None:
 
     X, y = spiral_data(samples=100, classes=3)  # This is your data
 
     dense1 = DenseLayer(2, 3)
     activation1 = ActivationReLU()
-    dense2 = DenseLayer(
-        3, 3
-    )  # The output layer is what ever or how ever many classes that you have
+    dense2 = DenseLayer(3, 3)
+    # The output layer is what ever or how ever many classes that you have
 
     activation2 = ActivationSoftMax()
 
