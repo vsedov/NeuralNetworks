@@ -9,13 +9,11 @@
 __author__ = "Viv Sedov"
 __email__ = "viv.sb@hotmail.com"
 
-import better_exceptions
+import sys
+
 from frosch import hook
 
-better_exceptions.hook()
 hook()
-
-import sys
 
 
 def is_venv():

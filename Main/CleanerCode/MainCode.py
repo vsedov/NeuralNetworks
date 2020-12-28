@@ -24,8 +24,9 @@ class DenseLayer:
     def forward(self, inputs: list) -> np:
         self.outputs = np.dot(inputs, self.weights) + self.biases
 
+    # Very simple, but very nice to do as well .
 
-# Very simple, but very nice to do as well .
+
 class ActivationReLU:
     def forward(self, inputs) -> np:
         self.outputs = np.maximum(0, inputs)
@@ -45,24 +46,34 @@ class ActivationSoftMax:
 def main() -> None:
 
     X, y = spiral_data(samples=100, classes=3)  # This is your data
-
-    dense1 = DenseLayer(2, 3)
+    dense1 = DenseLayer(2, 10)  # So inputs are 2
+    dense2 = DenseLayer(10, 5)
+    dense3 = DenseLayer(5, 10)
+    dense4 = DenseLayer(10, 3)
+    # ^ Because classes is three
     activation1 = ActivationReLU()
-    dense2 = DenseLayer(3, 3)
-    # The output layer is what ever or how ever many classes that you have
-
-    activation2 = ActivationSoftMax()
+    activation2 = ActivationReLU()
+    activation3 = ActivationReLU()
+    activation4 = ActivationSoftMax()
 
     dense1.forward(X)
     activation1.forward(dense1.outputs)
+
     dense2.forward(activation1.outputs)
     activation2.forward(dense2.outputs)
 
-    pp([x := activation2.outputs[:5], type(x)])
+    dense3.forward(activation2.outputs)
+    activation3.forward(dense3.outputs)
+
+    dense4.forward(activation3.outputs)
+    activation4.forward(dense4.outputs)
+
+    pp([x := activation4.outputs[:5], np.max(x, axis=0, keepdims=True)])
 
 
 if __name__ == "__main__":
     hook()
 
-    nnfs.init()  # This does a defualt data type, for us, which is rather nice .
+    # This does a defualt data type, for us, which is rather nice .
+    nnfs.init()
     main()
