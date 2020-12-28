@@ -19,7 +19,7 @@ import torchvision
 from frosch import hook
 from pprintpp import pprint as pp
 
-logging.basicConfig(filename="LogFileForTorchnet.py", level=logging.INFO)
+logging.basicConfig(filename="LogFileForTorchnet.log", level=logging.INFO)
 
 # Inheriting all values within the nnmodules -
 # Init running from super, and we do super init .

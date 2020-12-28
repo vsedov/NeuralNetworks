@@ -53,17 +53,17 @@ def torch_data_set():
     # i want to do this with the counter tool, im curious to see how that would work, do this after this video .
 
     # What we are doing here is checking the data types ballance - in the example above
-    total = 0
-    counter_dict = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0}
+    # total = 0
+    # counter_dict = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0}
 
-    for data in trainset:
-        Xs, ys = data
-        for y in ys:
-            counter_dict[int(y)] += 1
-            total += 1
-    # print(counter_dict)
-    for i in counter_dict:
-        print("{}:{}".format(i, (counter_dict[i] / total) * 100))
+    # for data in trainset:
+    #     Xs, ys = data
+    #     for y in ys:
+    #         counter_dict[int(y)] += 1
+    #         total += 1
+    # # print(counter_dict)
+    # for i in counter_dict:
+    #     print("{}:{}".format(i, (counter_dict[i] / total) * 100))
 
     print("\n")
     lister = []
