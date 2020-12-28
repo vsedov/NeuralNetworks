@@ -11,6 +11,7 @@ __email__ = "viv.sb@hotmail.com"
 import logging
 
 import numpy as np
+
 # nn Is for oop -> nn.functional and nn from function - both are a bit weird
 import torch
 import torch.nn as nn
