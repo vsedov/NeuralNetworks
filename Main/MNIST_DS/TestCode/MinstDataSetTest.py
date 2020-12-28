@@ -8,7 +8,6 @@
 __author__ = "Viv Sedov"
 __email__ = "viv.sb@hotmail.com"
 
-import collections.abc
 import logging
 from collections import Counter
 from itertools import count

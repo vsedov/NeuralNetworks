@@ -19,6 +19,8 @@ from torchvision import datasets, transforms
 
 logging.basicConfig(filename="LogForDataSet.log", level=logging.INFO)
 
+from NeuralNet import Net
+
 
 def data_set():
     train = datasets.MNIST(
@@ -27,11 +29,19 @@ def data_set():
         download=True,
         transform=transforms.Compose([transforms.ToTensor()]),
     )
+    test = datasets.MNIST(
+        "",
+        train=False,
+        download=True,
+        transform=transforms.Compose([transforms.ToTensor()]),
+    )
+    # This was annoying as this took me more time to figure out what really is going on
+    trainset = torch.utils.data.DataLoader(train, batch_size=32, shuffle=True)
+    testset = torch.utils.data.DataLoader(test, batch_size=32, shuffle=True)
 
 
 def main() -> None:
-
-    pass
+    data_set()
 
 
 if __name__ == "__main__":
