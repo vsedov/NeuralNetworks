@@ -28,12 +28,12 @@ class DenseLayer:
 
 
 class ActivationReLU:
-    def forward(self, inputs) -> np:
+    def forward(self, inputs: list) -> np:
         self.outputs = np.maximum(0, inputs)
 
 
 class ActivationSoftMax:
-    def forward(self, inputs) -> np:
+    def forward(self, inputs: list) -> np:
         expVal = np.exp(inputs - np.max(inputs, axis=1, keepdims=True))
         # Cool this works - Take Value away and keeep that dimension .
         # This prevents overflow error
