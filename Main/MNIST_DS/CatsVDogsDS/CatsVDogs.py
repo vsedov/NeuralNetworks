@@ -20,6 +20,8 @@ from frosch import hook
 from pprintpp import pprint as pp
 from tqdm import tqdm
 
+torch.cuda.set_device(0)
+
 
 class Net(nn.Module):
     def __init__(self):
@@ -28,21 +30,36 @@ class Net(nn.Module):
         self.conv2 = nn.Conv2d(32, 64, 5)
         self.conv3 = nn.Conv2d(64, 128, 5)
 
-        # This is some fake data that you parse through to get the values 
-        # This is somethign that oyu can get rid over time as well, if you would wish 
+        # This is some fake data that you parse through to get the values
+        # This is somethign that oyu can get rid over time as well, if you would wish
         x = torch.randn(50, 50).view(-1, 1, 50, 50)
+        # -1 = what ever you want .
+        # 1 x 50 x  50 - this is how ever many feature set that you have
+        # or the given image size
+
         self.to_linear = None
         self.convs(x)
 
         self.fc1 = nn.Linear(self.to_linear, 512)
         self.fc2 = nn.Linear(512, 2)
 
+    # Fake forward parse , this is not the whole forward method, but merely a part of it .
+    # This only does teh first three layer forward .
     def convs(self, x):
+
+        # Check the shape, and then multiply the dimension
+        # So what we want to get that given data, adn those varialbes .
+        # self.convs => Part of the forward method .
+
+        # x = F.max_pool2d(F.relu(self.conv(X)) (2,2))
         x = F.max_pool2d(F.relu(self.conv1(x)), (2, 2))
         x = F.max_pool2d(F.relu(self.conv2(x)), (2, 2))
         x = F.max_pool2d(F.relu(self.conv3(x)), (2, 2))
 
         print(x[0].shape)
+        # this with this is that you dont really know what everything is properly
+        # That is you dont know the gievn shape that you have ,. so you would have to deal with that
+
         print(x[0].shape[0] * x[0].shape[1] * x[0].shape[2])
 
         if self.to_linear is None:
@@ -59,21 +76,22 @@ class Net(nn.Module):
 
 
 class DogsVsCats(object):
-    IMG_SIZE = 50
+    def __init__(self):
+        self.IMG_SIZE = 50
 
-    CATS = "kagglecatsanddogs_3367a/PetImages/Cat/"
+        self.CATS = "kagglecatsanddogs_3367a/PetImages/Cat/"
 
-    DOGS = "kagglecatsanddogs_3367a/PetImages/Dog/"
+        self.DOGS = "kagglecatsanddogs_3367a/PetImages/Dog/"
 
-    # using one hot veector or 2 hot vecotr
-    LABELS = {CATS: 0, DOGS: 1}
-    # This allow us to get 1 hot vector and those are classes .
+        # using one hot veector or 2 hot vecotr
+        self.LABELS = {self.CATS: 0, self.DOGS: 1}
+        # This allow us to get 1 hot vector and those are classes .
 
-    training_data = []
-    # Dogs and cats with label
+        self.training_data = []
+        # Dogs and cats with label
 
-    catCount = 0
-    dogCount = 0
+        self.catCount = 0
+        self.dogCount = 0
 
     # Counting of balance , and knowing how much data and difference there are  . make sure you have enough .
 
@@ -126,6 +144,10 @@ def main() -> None:
     # cv2.imshow("name", cv2.resize(training_data[1][0], (500, 500)))
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
+
+    for data in training_data:
+        pp(data[:5])
+        # So this would give some sort of given test set for all given data
 
     pointer = Net()
 
