@@ -3,10 +3,12 @@ venv
 # create by https://github.com/iamcco/coc-gitignore (Wed Dec 16 2020 00:29:45 GMT+0000 (Greenwich Mean Time))
 # Python.gitignore:
 # Byte-compiled / optimized / DLL files
+PetImages/
+kagglecatsanddogs_3367a/
 __pycache__/
 *.py[cod]
 *$py.class
-
+training_data.npy
 # C extensions
 *.so
 

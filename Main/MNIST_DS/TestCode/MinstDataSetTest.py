@@ -18,6 +18,8 @@ from frosch import hook
 from pprintpp import pprint as pp
 from torchvision import datasets, transforms
 
+torch.cuda.set_device(0)
+
 
 def torch_data_set():
 
@@ -38,16 +40,17 @@ def torch_data_set():
 
     trainset = torch.utils.data.DataLoader(train, batch_size=32, shuffle=True)
     testset = torch.utils.data.DataLoader(test, batch_size=32, shuffle=True)
+
     # We use shuffle to generlise - everything we can do to give neural network
     # We can Nerual Network , hmm so those weights have to be within random .
 
-    #     for data in trainset:
-    #         pp(data)
-    #         break
-    #     x, y = data[0][0], data[1][0]
-    #     plt.imshow(x.view([28, 28]))
-    #     plt.show()
-    #     print("\n")
+    for data in trainset:
+        pp(data)
+        break
+    x, y = data[0][0], data[1][0]
+    plt.imshow(x.view([28, 28]))
+    plt.show()
+    print("\n")
 
     # i want to do this with the counter tool, im curious to see how that would work, do this after this video .
 
@@ -70,7 +73,6 @@ def torch_data_set():
         x, y = data  # data has 2 set
         for i in y:
             lister.append(int(i))
-            total += 1
 
     x = Counter(lister)
     for i in range(len(x)):

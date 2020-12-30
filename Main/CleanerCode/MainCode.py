@@ -46,6 +46,7 @@ class ActivationSoftMax:
 def main() -> None:
 
     X, y = spiral_data(samples=100, classes=3)  # This is your data
+
     dense1 = DenseLayer(2, 10)  # So inputs are 2
     dense2 = DenseLayer(10, 5)
     dense3 = DenseLayer(5, 10)
@@ -67,8 +68,6 @@ def main() -> None:
 
     dense4.forward(activation3.outputs)
     activation4.forward(dense4.outputs)
-
-    pp([x := activation4.outputs[:5], np.max(x, axis=0, keepdims=True)])
 
 
 if __name__ == "__main__":
