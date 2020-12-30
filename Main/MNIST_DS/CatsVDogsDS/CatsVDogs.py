@@ -28,8 +28,8 @@ class Net(nn.Module):
         self.conv2 = nn.Conv2d(32, 64, 5)
         self.conv3 = nn.Conv2d(64, 128, 5)
 
-        # This is some fake data that you parse through to get the values 
-        # This is somethign that oyu can get rid over time as well, if you would wish 
+        # This is some fake data that you parse through to get the values
+        # This is somethign that oyu can get rid over time as well, if you would wish
         x = torch.randn(50, 50).view(-1, 1, 50, 50)
         self.to_linear = None
         self.convs(x)
