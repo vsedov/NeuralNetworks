@@ -134,10 +134,9 @@ def main() -> None:
 
                 if pc == real_class:
                     correct += 1
-                total += 1 
-                #This is one at a time . 
-                # and this is not that great . 
-
+                total += 1
+                # This is one at a time .
+                # and this is not that great .
 
         print(round(correct / total, 3))
 
