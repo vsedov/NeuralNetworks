@@ -14,7 +14,6 @@ import numpy as np
 from frosch import hook
 from nnfs.datasets import spiral_data, vertical_data
 from pprintpp import pprint as pp
-from tqdm import tqdm
 
 
 class DenseLayer:
@@ -127,7 +126,7 @@ def random_optimization():
     # cmap = 'Im  guessing this is the type of color that we have '
     # x axis = X[:,0]
     # y axis = X[:,1]
-    plt.show()
+    # plt.show()
 
     dense1 = DenseLayer(2, 3)
     activation1 = ActivationReLU()
@@ -139,7 +138,7 @@ def random_optimization():
     # Create some variables to trqack the best loss and weights with teh biases
 
     lowest_loss = 99999999  # random var
-
+    # Have coppy of weights and biases
     best_dense1_weights = dense1.weights.copy()
     best_dense1_biases = dense1.biases.copy()
 
@@ -151,16 +150,17 @@ def random_optimization():
     and just coppying weights and bias, due to how python workds via oop  .
     copy() => is a function within our given parameters . 
 
-
     """
 
-    for iteration in tqdm(range(10000)):
-        dense1.weights = 0.005 * np.random.randn(2, 3)
-        dense1.biases = 0.005 * np.ranodm.randn(1, 3)
+    for iteration in range(1000000):
+        # for each weight and bias add on some very small value
+        dense1.weights += 0.005 * np.random.randn(2, 3)
+        dense1.biases += 0.005 * np.random.randn(1, 3)
 
-        dense2.weights = 0.005 * np.random.randn(3, 3)
-        dense2.biases = 0.005 * np.random.randn(1, 3)
+        dense2.weights += 0.005 * np.random.randn(3, 3)
+        dense2.biases += 0.005 * np.random.randn(1, 3)
 
+        # push forwrd some extra value onwards
         dense1.forward(X)
         # But in this case we are manually changing those weights within our own range .
 
@@ -171,7 +171,55 @@ def random_optimization():
         activation2.forward(dense2.outputs)
         # now calculate the given loss that we have .
 
-        loss_function.forward(activation2.outputs, y)
+        # Calculate the orignal loss from softmax output .
+        loss = loss_function.calculate(activation2.outputs, y)
+        arger = np.argmax(activation2.outputs, axis=1)
+        accuracy = np.mean(arger == y)
+
+        if loss < lowest_loss:
+            print(
+                "New set of weights found within the given iteration {} loss {} acc {} ".format(
+                    iteration, loss, accuracy
+                )
+            )
+            # that given copy, bcomes what ever the dense value oof the weights are now
+
+            best_dense1_weights = dense1.weights.copy()
+            best_dense1_biases = dense1.biases.copy()
+
+            best_dense2_weights = dense2.weights.copy()
+            best_dense2_biases = dense2.biases.copy()
+            lowest_lost = loss
+
+            # rever to the previous weight and changes that it had before .
+            # if thta is not the case, revert back to the previous values it had before hand .
+
+        else:
+            dense1.weights = best_dense1_weights.copy()
+            dense1.biases = best_dense1_biases.copy()
+
+            dense2.weights = best_dense2_weights.copy()
+            dense2.biases = best_dense2_biases.copy()
+
+    print(lowest_lost)
+
+    # In this scenario, when we are optimising values within the given bias
+
+    # It just seems, stating those values, to what ever our original copy was
+    """
+
+
+    best_dense1_weights = dense1.weights.copy()
+    best_dense1_biases = dense1.biases.copy()
+
+    best_dense2_weights = dense2.weights.copy()
+    best_dense1_biases = dense2.biases.copy()
+
+
+    pretty much what we are doing is stating that, we have this best dense which is the orignal, 
+    we stat eback to what ever we have at first 
+    or we continue onewards and prpaire for loss 
+    """
 
 
 if __name__ == "__main__":
@@ -179,5 +227,5 @@ if __name__ == "__main__":
 
     # This does a defualt data type, for us, which is rather nice .
     nnfs.init()
-    main()
+    # main()
     random_optimization()
