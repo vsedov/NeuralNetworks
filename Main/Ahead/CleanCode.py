@@ -7,11 +7,14 @@
 # File Name: CleanCode.py
 __author__ = "Viv Sedov"
 __email__ = "viv.sb@hotmail.com"
+
+import matplotlib.pyplot as plt
 import nnfs
 import numpy as np
 from frosch import hook
-from nnfs.datasets import spiral_data
+from nnfs.datasets import spiral_data, vertical_data
 from pprintpp import pprint as pp
+from tqdm import tqdm
 
 
 class DenseLayer:
@@ -69,11 +72,6 @@ class Loss_CategoricalCrossentropy(Loss):
         return cross_entropy
 
 
-def accuracy(X, y):
-    X = np.argmax(X, axis=1)
-    print(X)
-
-
 def main() -> None:
 
     X, y = spiral_data(samples=100, classes=3)  # This is your data
@@ -105,7 +103,75 @@ def main() -> None:
     loss = loss_function.calculate(activation4.outputs, y)
     print("Loss : ", loss)
 
-    accuracy(activation4.outputs, y)
+    def accuracy(X, y) -> float:
+        x = np.argmax(X, axis=1)
+        if len(y.shape) == 2:
+            y = np.argmax(y, axis=1)
+        pp(x)
+        pp(y)
+        return np.mean(x == y)
+
+    print(accuracy(X, y))
+
+
+def random_optimization():
+    X, y = vertical_data(samples=100, classes=3)
+    # Using plt.scanenr instead of plt.imshow,
+
+    # cmap - color map
+    # C -> color sequence, this is not required - it allows us to seperate data that we have .
+
+    plt.scatter(X[:, 0], X[:, 1], c=y, s=10, cmap="brg")
+    # C = y ?
+    # s  = size you moron ... s = 10, makes those dots small .
+    # cmap = 'Im  guessing this is the type of color that we have '
+    # x axis = X[:,0]
+    # y axis = X[:,1]
+    plt.show()
+
+    dense1 = DenseLayer(2, 3)
+    activation1 = ActivationReLU()
+    dense2 = DenseLayer(3, 3)
+    activation2 = ActivationSoftMax()
+
+    loss_function = Loss_CategoricalCrossentropy()
+
+    # Create some variables to trqack the best loss and weights with teh biases
+
+    lowest_loss = 99999999  # random var
+
+    best_dense1_weights = dense1.weights.copy()
+    best_dense1_biases = dense1.biases.copy()
+
+    best_dense2_weights = dense2.weights.copy()
+    best_dense1_biases = dense2.biases.copy()
+
+    """
+    Loss to large value, and decrease it when a new lower loss is found, 
+    and just coppying weights and bias, due to how python workds via oop  .
+    copy() => is a function within our given parameters . 
+
+
+    """
+
+    for iteration in tqdm(range(10000)):
+        dense1.weights = 0.005 * np.random.randn(2, 3)
+        dense1.biases = 0.005 * np.ranodm.randn(1, 3)
+
+        dense2.weights = 0.005 * np.random.randn(3, 3)
+        dense2.biases = 0.005 * np.random.randn(1, 3)
+
+        dense1.forward(X)
+        # But in this case we are manually changing those weights within our own range .
+
+        activation1.forward(dense1.outputs)
+        dense2.forward(activation1.outputs)
+
+        # We have two layers here .
+        activation2.forward(dense2.outputs)
+        # now calculate the given loss that we have .
+
+        loss_function.forward(activation2.outputs, y)
 
 
 if __name__ == "__main__":
@@ -114,3 +180,4 @@ if __name__ == "__main__":
     # This does a defualt data type, for us, which is rather nice .
     nnfs.init()
     main()
+    random_optimization()
