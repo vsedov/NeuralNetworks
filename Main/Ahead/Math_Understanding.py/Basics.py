@@ -26,11 +26,12 @@ def f(x):
 
     print(x.shape, container.shape)
 
-    plt.plot(x,container)
+    plt.plot(x, container)
     plt.show()
 
-    plt.plot(x,x2)
+    plt.plot(x, x2)
     plt.show()
+
 
 def main() -> None:
     x = np.array(range(10))
