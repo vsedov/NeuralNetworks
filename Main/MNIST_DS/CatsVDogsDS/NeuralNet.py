@@ -14,7 +14,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from frosch import hook
-from pprintpp import pprint as pp
 from tqdm import tqdm
 
 
@@ -106,7 +105,7 @@ def main() -> None:
     test_y = y[-val_size:]
 
     BATCH_SIZE = 256
-    EPOCHS = 50
+    EPOCHS = 200
 
     def train(net):
         for epoch in range(EPOCHS):
