@@ -63,7 +63,9 @@ class Net(nn.Module):
 
 
 def main() -> None:
+    ### This is the mainpart of the gpu - you have to define where that gpu does the procesisng
 
+    ### --------------------------------------------------------
     device = torch.cuda.is_available()
     print(device)
 
@@ -74,9 +76,10 @@ def main() -> None:
         device = torch.device("cuda:0")
         print("On Gpu")
     else:
+
         device = torch.device("cpu")
         print("On Cpu ")
-
+    ### --------------------------------------------------------
     # Encoder and decoder - and have that on two different gpus ?
 
     REBUILD_DATA = False
@@ -103,7 +106,7 @@ def main() -> None:
     test_y = y[-val_size:]
 
     BATCH_SIZE = 256
-    EPOCHS = 40
+    EPOCHS = 50
 
     def train(net):
         for epoch in range(EPOCHS):
@@ -134,10 +137,9 @@ def main() -> None:
 
                 if pc == real_class:
                     correct += 1
-                total += 1 
-                #This is one at a time . 
-                # and this is not that great . 
-
+                total += 1
+                # This is one at a time .
+                # and this is not that great .
 
         print(round(correct / total, 3))
 

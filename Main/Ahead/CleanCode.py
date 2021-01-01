@@ -53,7 +53,7 @@ class Loss:
 
 
 class Loss_CategoricalCrossentropy(Loss):
-    def forward(self, y_pred, y_true):
+    def forward(self, y_pred: list, y_true: list) -> np:
         samples = len(y_pred)
         y_pred_clipped = np.clip(y_pred, 1e-07, 1 - 1e-07)
 
@@ -65,8 +65,13 @@ class Loss_CategoricalCrossentropy(Loss):
         elif len(y_true.shape) == 2:
             correct_confidence = np.sum(y_pred_clipped * y_true, axis=1)
 
-        neg_log = -np.log(correct_confidence)
-        return neg_log
+        cross_entropy = -np.log(correct_confidence)
+        return cross_entropy
+
+
+def accuracy(X, y):
+    X = np.argmax(X, axis=1)
+    print(X)
 
 
 def main() -> None:
@@ -100,15 +105,7 @@ def main() -> None:
     loss = loss_function.calculate(activation4.outputs, y)
     print("Loss : ", loss)
 
-    x = activation4.outputs
-
-    pointer = np.argmax(x)
-
-    print(pointer)
-    y_outer = x.flat[pointer]
-    print(y_outer)
-
-    pp(np.max(x))
+    accuracy(activation4.outputs, y)
 
 
 if __name__ == "__main__":
