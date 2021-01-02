@@ -26,17 +26,22 @@ def f(x):
 
     print(x.shape, container.shape)
 
-    plt.plot(x,container)
-    plt.show()
 
-    plt.plot(x,x2)
-    plt.show()
+def d(x):
+    return 2 * x ** 2
+
 
 def main() -> None:
-    x = np.array(range(10))
-    y = f(x)
-    print(y)
 
+    delta = 1e-012
+    x1 = 1
+    x2 = x1 + delta
+    y1 = d(x1)
+    y2 = d(x2)
+
+    diriv = (y2 - y1) / (x2 - x1)
+
+    tangent_line = y2 - diriv
 
 if __name__ == "__main__":
     hook()
