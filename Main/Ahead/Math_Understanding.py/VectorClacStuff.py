@@ -2,7 +2,7 @@
 # -- coding: utf-8 --
 # vim:fenc=utf-8
 #
-# Copyright © 2021-01-02 Viv Sedov 
+# Copyright © 2021-01-02 Viv Sedov
 #
 # File Name: VectorClacStuff.py
 __author__ = "Viv Sedov"
@@ -14,11 +14,10 @@ from pprintpp import pprint as pp
 
 
 def main() -> None:
-    
+
     pass
 
 
 if __name__ == "__main__":
     hook()
     main()
-

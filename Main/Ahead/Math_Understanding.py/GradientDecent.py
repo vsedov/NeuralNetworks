@@ -43,6 +43,7 @@ def main() -> None:
 
     tangent_line = y2 - diriv
 
+
 if __name__ == "__main__":
     hook()
     main()
