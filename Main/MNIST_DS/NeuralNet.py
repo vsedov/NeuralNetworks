@@ -48,11 +48,11 @@ class Net(nn.Module):
         inputs = F.relu(self.fc2(inputs))
         inputs = F.relu(self.fc3(inputs))
         inputs = self.fc4(inputs)
-        return F.log_softmax(inputs, dim=1)
+        return F.softmax(inputs, dim=1)
 
     # Pretty certain dim is axis - like numpy and axis = 1
 
-
+    # Single Input chage
 def main() -> None:
 
     train = datasets.MNIST(

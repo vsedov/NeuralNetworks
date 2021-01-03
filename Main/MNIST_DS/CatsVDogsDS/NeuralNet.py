@@ -105,7 +105,7 @@ def main() -> None:
     test_y = y[-val_size:]
 
     BATCH_SIZE = 256
-    EPOCHS = 200
+    EPOCHS = 10
 
     def train(net):
         for epoch in range(EPOCHS):

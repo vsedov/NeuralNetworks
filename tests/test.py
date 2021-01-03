@@ -15,6 +15,21 @@ from frosch import hook
 
 hook()
 
+import torch.nn as nn
+import torch.nn.functional as F
+
+
+class Test(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.encoder = nn.Sequential(nn.Linear(784, 30), nn.Tanh())
+        self.decoder = nn.Sequential(nn.Linear(30, 784), nn.Tanh())
+
+    def forward(self, x):
+        x = self.encoder(x)
+        x = self.decoder(x)
+        return x
+
 
 def is_venv():
     return hasattr(sys, "real_prefix") or (
@@ -23,7 +38,8 @@ def is_venv():
 
 
 def main() -> None:
-    print(is_venv())
+    model = Test().to(0)
+    crit = nn.MSELoss()
 
 
 if __name__ == "__main__":
