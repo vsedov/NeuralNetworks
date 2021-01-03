@@ -96,6 +96,7 @@ def main() -> None:
     accuracy = np.mean(pred == y)
     print(accuracy)
 
+
 if __name__ == "__main__":
     hook()
 

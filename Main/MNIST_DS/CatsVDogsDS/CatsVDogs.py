@@ -22,6 +22,7 @@ from tqdm import tqdm
 
 torch.cuda.set_device(0)
 
+
 class DogsVsCats(object):
     def __init__(self):
         self.IMG_SIZE = 50
