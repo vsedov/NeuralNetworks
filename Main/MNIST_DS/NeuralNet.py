@@ -53,6 +53,8 @@ class Net(nn.Module):
     # Pretty certain dim is axis - like numpy and axis = 1
 
     # Single Input chage
+
+
 def main() -> None:
 
     train = datasets.MNIST(
