@@ -14,7 +14,7 @@ from pprintpp import pprint as pp
 
 
 def main() -> None:
-    pass 
+    pass
 
 
 if __name__ == "__main__":
