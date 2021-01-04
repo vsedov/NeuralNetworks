@@ -47,7 +47,8 @@ def main() -> None:
         dy/dx -> diriv 
         y = mx + c 
         c = y - mx 
-            
+        
+        # Wonder how partial dirv would work here 
         tangent line is :
         
         mx* x1 + b  = y -> Tangehnt line
