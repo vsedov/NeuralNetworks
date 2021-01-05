@@ -152,7 +152,7 @@ def random_optimization():
 
     """
 
-    for iteration in range(1000000):
+    for iteration in range(10):
         # for each weight and bias add on some very small value
         dense1.weights += 0.005 * np.random.randn(2, 3)
         dense1.biases += 0.005 * np.random.randn(1, 3)
@@ -171,7 +171,6 @@ def random_optimization():
         activation2.forward(dense2.outputs)
         # now calculate the given loss that we have .
 
-        # Calculate the orignal loss from softmax output .
         loss = loss_function.calculate(activation2.outputs, y)
         arger = np.argmax(activation2.outputs, axis=1)
         accuracy = np.mean(arger == y)
@@ -182,7 +181,6 @@ def random_optimization():
                     iteration, loss, accuracy
                 )
             )
-            # that given copy, bcomes what ever the dense value oof the weights are now
 
             best_dense1_weights = dense1.weights.copy()
             best_dense1_biases = dense1.biases.copy()
@@ -192,8 +190,6 @@ def random_optimization():
             lowest_lost = loss
 
             # rever to the previous weight and changes that it had before .
-            # if thta is not the case, revert back to the previous values it had before hand .
-
         else:
             dense1.weights = best_dense1_weights.copy()
             dense1.biases = best_dense1_biases.copy()
@@ -227,5 +223,5 @@ if __name__ == "__main__":
 
     # This does a defualt data type, for us, which is rather nice .
     nnfs.init()
-    # main()
+    main()
     random_optimization()
