@@ -11,6 +11,18 @@ __email__ = "viv.sb@hotmail.com"
 import numpy as np
 from frosch import hook
 from pprintpp import pprint as pp
+from dataclasses import dataclass
+
+
+@dataclass
+class Vectr3d:
+    x: int
+    y: int
+    z: int
+
+
+u = Vectr3d(10, 20, 10)
+print(u)
 
 
 def forward():
@@ -40,3 +52,12 @@ def main() -> None:
 if __name__ == "__main__":
     hook()
     main()
+
+    """
+    Dataclasses very obsure subject than the other ones 
+    data classes are something ive grown in python . 
+    A data class is a class whose sole purpose is to hold data 
+    the class will have variables than can be acced and written to but there is no extra logic to it .
+
+
+    """
