@@ -11,18 +11,27 @@ __email__ = "viv.sb@hotmail.com"
 import numpy as np
 from frosch import hook
 from pprintpp import pprint as pp
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+"""
+Side note : 
+Field, if you use dataclases and have a field 
+the field object describes teh given field that you have , 
+Name - type  defualt - defualt_facotry, init, rer, hash and compare . 
+"""
 
 
 @dataclass
 class Vectr3d:
-    x: int
+    x: int = field(repr=False)
     y: int
     z: int
 
+    def __post_init__(self):
+        self.x = self.y + self.z
+
 
 u = Vectr3d(10, 20, 10)
-print(u)
+print(u.__post_init__())
 
 
 def forward():
@@ -52,12 +61,16 @@ def main() -> None:
 if __name__ == "__main__":
     hook()
     main()
-
     """
     Dataclasses very obsure subject than the other ones 
     data classes are something ive grown in python . 
     A data class is a class whose sole purpose is to hold data 
     the class will have variables than can be acced and written to but there is no extra logic to it .
 
+    So what does this do exactly ? 
+    You define things with name and type 
+    while the function of our class is limited, the point of the data class 
+    is to increase efficiency and reduce errors in your code . 
+    its much better to pass around a vector3d than a int variable , so having this is better . 
 
     """
