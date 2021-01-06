@@ -8,10 +8,11 @@
 __author__ = "Viv Sedov"
 __email__ = "viv.sb@hotmail.com"
 
+from dataclasses import dataclass, field
+
 import numpy as np
 from frosch import hook
 from pprintpp import pprint as pp
-from dataclasses import dataclass, field
 
 
 @dataclass

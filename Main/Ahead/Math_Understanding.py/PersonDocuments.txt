@@ -1,0 +1,6 @@
+So something that you will have to note about is when you are using theese values 
+when ever you do have some sort of sumunation, the dx of that will always be one, for both x and y 
+the reason for that is quite obvious but for teh sake of not understand, the main reason for that is because it is x ^ 1 -1 
+meaning you will always get zero, though this is some what confusing for me in th elong term, but im sure i will get it soon 
+what it is doing is, going back and looking back at those partial dx and see thse changes that those values have on the 
+whole system, and the one that has the most impact would get chosen, thats from what i can tell though 
