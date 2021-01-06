@@ -41,25 +41,60 @@ def forward():
 
     relupointer = relu(pointer_bias)
     print(
-        f"For values {pointer} we add a bias to given inputs to get {pointer_bias} and once put into relu, you would get {relupointer}"
+        f"{pointer} bias  {pointer_bias} and once put into relu, you would get {relupointer}"
     )
 
     print(f"\n \n the neuron would tke this input . {pointer_bias}")
 
+    # Relu
+    # back propergation stage of this
     z = relu(pointer_bias)
-    dvalue = 1
-    # ^  This is the dirivative of the next layer
-    drelu_dz = dvalue * (1.0 if z > 0 else 0)
-    # ^ this is the relu dx
 
-    # This is teh back prop stage of going back .
+    dvalue = 1
+    drelu_dz = dvalue * (1.0 if z > 0 else 0)
+
+    # -----------------------------#
+    # Partial Derivative of teh chain
+    # Rule : Relu * sumunation
     dsum_dxw0 = 1
     drelu_dxw0 = drelu_dz * dsum_dxw0
-    print(f"Using the Chaing Rule and partial Dirivative you would get \n{drelu_dxw0}")
+
+    dsum_dxw1 = 1
+    drelu_dxw1 = drelu_dz * dsum_dxw1
+
+    dsum_dxw2 = 1
+    drelu_dxw2 = drelu_dz * dsum_dxw2
+
+    dsum_db = 1
+    drelu_db = drelu_dz * dsum_db
+
+    print(drelu_dxw0, drelu_dxw1, drelu_dxw2, drelu_db)
+
+    # ----------------------------#
+    # Sumunation * x[i]w[i]
+
+    dmul_dx0 = w[0]
+    dmul_dx1 = w[1]
+    dmul_dx2 = w[2]
+
+    dmul_dw0 = x[0]
+    dmul_dw1 = x[1]
+    dmul_dw2 = x[2]
+
+    drelu_dx0 = drelu_dxw0 * dmul_dx0
+    drelu_dw0 = drelu_dxw0 * dmul_dw0
+
+    drelu_dx1 = drelu_dxw1 * dmul_dx1
+    drelu_dw1 = drelu_dxw1 * dmul_dw1
+
+    drelu_dx2 = drelu_dxw2 * dmul_dx2
+    drelu_dw2 = drelu_dxw2 * dmul_dw2
+
+    pp([drelu_dx0, drelu_dw0, drelu_dx1, drelu_dw1, drelu_dx2, drelu_dw2])
 
 
 def relu(inputs):
-    return max(inputs, 0.001)
+    return np.max(inputs, 0)
 
 
 def main() -> None:

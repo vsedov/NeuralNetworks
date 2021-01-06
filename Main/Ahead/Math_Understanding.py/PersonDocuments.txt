@@ -4,3 +4,33 @@ the reason for that is quite obvious but for teh sake of not understand, the mai
 meaning you will always get zero, though this is some what confusing for me in th elong term, but im sure i will get it soon 
 what it is doing is, going back and looking back at those partial dx and see thse changes that those values have on the 
 whole system, and the one that has the most impact would get chosen, thats from what i can tell though 
+
+So something that you would ahve to realise is that you would always have that given sum to some sort of function
+when ever you would have to do when ever you would have to deal with those sytem values 
+
+What we do is the given formula that i have writen down within the given book that i have, but this does not stop 
+the fact that there is so much more that would have to 
+be covered when writing this . 
+
+Onwe iof the thing that you have to do when continuing 
+doing the backward parse is tht 
+the function that comes before the sum
+is the multiplication, of the weights and inputs 
+the dx for a product is what ever , is always going to be 
+one . 
+
+So if you are multipling through the given values 
+what you are doing 
+is doing a partial dx of the weights and the input values 
+
+
+In this case, Pd [x] of f(x,y) =y 
+ Pd [y] of f(x,y) =x
+
+ notice the given trend there 
+
+ the partial dx value of what ever we havem wuth resepct
+ to x, would equal y 
+ and a partial dx with respect to y woudl equal to x 
+
+ 
