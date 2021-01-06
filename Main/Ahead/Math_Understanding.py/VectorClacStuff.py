@@ -12,12 +12,6 @@ import numpy as np
 from frosch import hook
 from pprintpp import pprint as pp
 from dataclasses import dataclass, field
-"""
-Side note : 
-Field, if you use dataclases and have a field 
-the field object describes teh given field that you have , 
-Name - type  defualt - defualt_facotry, init, rer, hash and compare . 
-"""
 
 
 @dataclass
@@ -48,6 +42,19 @@ def forward():
     print(
         f"For values {pointer} we add a bias to given inputs to get {pointer_bias} and once put into relu, you would get {relupointer}"
     )
+
+    print(f"\n \n the neuron would tke this input . {pointer_bias}")
+
+    z = relu(pointer_bias)
+    dvalue = 1
+    # ^  This is the dirivative of the next layer
+    drelu_dz = dvalue * (1.0 if z > 0 else 0)
+    # ^ this is the relu dx
+
+    # This is teh back prop stage of going back .
+    dsum_dxw0 = 1
+    drelu_dxw0 = drelu_dz * dsum_dxw0
+    print(f"Using the Chaing Rule and partial Dirivative you would get \n{drelu_dxw0}")
 
 
 def relu(inputs):
