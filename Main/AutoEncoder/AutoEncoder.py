@@ -1,93 +1,153 @@
 #! /usr/bin/env python3
 # -- coding: utf-8 --
 # vim:fenc=utf-8
-
+#
+# Copyright © 2021-01-07 Viv Sedov
+#
+# File Name: AutoEncoder.py
 __author__ = "Viv Sedov"
 __email__ = "viv.sb@hotmail.com"
 
-import keras
-from keras import backend as K
-from keras.datasets import mnist
-from keras.layers import Conv2D, Dense, Dropout, Flatten, MaxPooling2D
-from keras.models import Sequential
+import logging
+from dataclasses import dataclass
 
-(x_train, y_train), (x_test, y_test) = mnist.load_data()
-
-img_rows, img_cols = 28, 28
-
-if K.image_data_format() == "channels_first":
-    x_train = x_train.reshape(x_train.shape[0], 1, img_rows, img_cols)
-    x_test = x_test.reshape(x_test.shape[0], 1, img_rows, img_cols)
-    input_shape = (1, img_rows, img_cols)
-else:
-    x_train = x_train.reshape(x_train.shape[0], img_rows, img_cols, 1)
-    x_test = x_test.reshape(x_test.shape[0], img_rows, img_cols, 1)
-    input_shape = (img_rows, img_cols, 1)
-
-x_train = x_train.astype("float32")
-x_test = x_test.astype("float32")
-x_train /= 255
-x_test /= 255
-
+import matplotlib.pyplot as plt
 import numpy as np
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+import torchvision
+from frosch import hook
+from pprintpp import pprint as pp
+from torchvision import datasets, transforms
+from tqdm import tqdm
 
-temp = []
-for img in x_train:
-    t = []
-    for row in img:
-        for i in row:
-            t.append(i)
-    temp.append(t)
-x_train = []
-x_train = temp
+torch.cuda.set_device(0)
+logging.basicConfig(filename="AutoEncoder.log", level=logging.DEBUG)
 
-x_train = np.array(x_train)
 
-x_train = x_train.reshape(60000, 784)
+class AutoEncoder(nn.Module):
+    def __init__(self, inputs):
+        super().__init__()
 
-model = Sequential()
-model.add(Dense(784, activation="relu", input_dim=784))
-model.add(Dense(256, activation="relu"))
-model.add(Dense(128, activation="relu"))
-model.add(Dense(256, activation="relu"))
-model.add(Dense(784, activation="relu"))
+        # This is quite basic but why not, just go with teh flow
+        self.encoder_hidden = nn.Linear(inputs, 128)
+        self.encoder_output = nn.Linear(128, 64)
+        self.encoder_output1 = nn.Linear(64, 32)
 
-model.compile(
-    loss=keras.losses.mean_squared_error,
-    optimizer=keras.optimizers.RMSprop(lr=0.0001, rho=0.9, epsilon=None, decay=0.0),
-    metrics=["accuracy"],
-)
+        self.decoder_output1 = nn.Linear(32, 64)
+        self.decoder_hidden = nn.Linear(64, 128)
+        self.decoder_output = nn.Linear(128, inputs)
 
-model.fit(x_train, x_train, verbose=1, epochs=10, batch_size=256)
+    # Another qite basic forward pass
+    def forward(self, inputs: torch.Tensor) -> nn:
+        inputs = F.leaky_relu(self.encoder_hidden(inputs))
+        inputs = F.leaky_relu(self.encoder_output(inputs))
+        inputs = torch.sigmoid(self.encoder_output1(inputs))
 
-import cv2
-from keras.models import load_model
+        inputs = F.leaky_relu(self.decoder_output1(inputs))
+        inputs = F.leaky_relu(self.decoder_hidden(inputs))
+        inputs = F.leaky_relu(self.decoder_output(inputs))
+        return inputs
 
-test = x_train[1].reshape(1, 784)
-y_test = model.predict(test)
 
-inp_img = []
-temp = []
-for i in range(len(test[0])):
-    if (i + 1) % 28 == 0:
-        temp.append(test[0][i])
-        inp_img.append(temp)
-        temp = []
+def main() -> None:
+    device = torch.cuda.is_available()
+    print(device)
+
+    device = torch.device("cuda:0")
+    print(device)
+
+    if torch.cuda.is_available():
+        device = torch.device("cuda:0")
+        print("On Gpu")
     else:
-        temp.append(test[0][i])
-out_img = []
-temp = []
-for i in range(len(y_test[0])):
-    if (i + 1) % 28 == 0:
-        temp.append(y_test[0][i])
-        out_img.append(temp)
-        temp = []
-    else:
-        temp.append(y_test[0][i])
 
-inp_img = np.array(inp_img)
-out_img = np.array(out_img)
+        device = torch.device("cpu")
+        print("On Cpu ")
 
-cv2.imshow("Test Image", inp_img)
-cv2.imshow("Output Image", out_img)
-cv2.waitKey(0)
+    train = datasets.MNIST(
+        "",
+        train=True,
+        download=True,
+        transform=transforms.Compose([transforms.ToTensor()]),
+    )
+
+    test = datasets.MNIST(
+        "",
+        train=False,
+        download=True,
+        transform=transforms.Compose([transforms.ToTensor()]),
+    )
+
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    print(device)
+
+    net = AutoEncoder(inputs=784).to(device)
+
+    # Optimiser, which im currently coding a manual version of it .
+
+    optimiser = optim.Adam(net.parameters(), lr=1e-3)
+
+    loss_function = nn.MSELoss()
+
+    trainset = torch.utils.data.DataLoader(
+        train, batch_size=512, shuffle=True, num_workers=4, pin_memory=True
+    )
+    testset = torch.utils.data.DataLoader(test, batch_size=10, shuffle=False)
+
+    test_examples = None
+
+    epoch = 20
+
+    for epoch in range(epoch):
+        loss_count = 0
+        for data, _ in trainset:
+            data = data.view(-1, 784)
+            data = data.to(device)
+
+            optimiser.zero_grad()  # What this should be linked to ?
+            output = net(data).to(device)
+
+            train_loss = loss_function(output, data)
+            train_loss.backward()
+            optimiser.step()
+            loss_count += train_loss.item()
+
+        print(
+            f"epoch {epoch +1 } / {epoch} loss = {loss_count} and given loss is {train_loss}"
+        )
+
+    test_examples = None
+
+    with torch.no_grad():
+        for data in testset:
+            data = data[0]
+            test_examples = data.view(-1, 784).to(device)
+            recon = net(test_examples)
+            break
+
+    with torch.no_grad():
+        number = 10
+        plt.figure(figsize=(20, 4))
+        for i in range(number):
+            # display original
+            plotter = plt.subplot(2, number, i + 1)
+            plt.imshow(test_examples[i].cpu().numpy().reshape(28, 28))
+            plt.gray()
+            plotter.get_xaxis().set_visible(False)
+            plotter.get_yaxis().set_visible(False)
+
+            # display reconstruction
+            plotter = plt.subplot(2, number, i + 1 + number)
+            plt.imshow(recon[i].cpu().numpy().reshape(28, 28))
+            plt.gray()
+            plotter.get_xaxis().set_visible(False)
+            plotter.get_yaxis().set_visible(False)
+        plt.show()
+
+
+if __name__ == "__main__":
+    hook()
+    main()

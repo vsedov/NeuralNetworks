@@ -1,0 +1,38 @@
+Things to note : 
+
+Encoder - this is the given model and the pointer of how it learns, with that being asid , this is there to reduce the compression of the data, or more so , reduce the lower representation  
+
+Decode - It is where teh data gets compressesd, and represenation of teh input data at the lowest given dimension it oculd get to . 
+
+Bottleneck - it is the compressed representation of the input data and the lowest dumension possible . 
+
+Reconstruction - This is teh method which would tell uis how well teh decode performed in reconstructing the given data . 
+
+With archtectures, you have have different types of networks , i merely messed with feedforward network , but with that being said , my current architecture that i have is just a simple feedforward network , when i tried out vae ,[ tried coding it ] i came across the convolutional network archetecutre, 
+
+
+# Extra notes that i have on this . 
+
+For the most part its like having two neural netowrks, combined into one , we are recreating that data from a lower representation of data which is useful for feature extraction, and also  dimenstion change , i have change the different ways that this can be done though, which i think is quite important . 
+
+
+
+So notes on the given dataset and the encoder, though im not all too sure why people like representing the images using plot , i ended up using opencv to show the data, just because im understand it more , 
+Somethng i noticed when i was messing around with teh datasets , i had to take a look at it again , and realised that the reconstruction of the data , compared to the test data  was very off ,
+
+With regards to different archtectures , when i first coded up an autoencoder i did all of this with a Linear Archetecture , with that being said ,  i have tried other networks like the convolutional one too , but just not within the autoencoder and more so with a normal neuralnetwork . 
+
+So whats going on within the forward pass, i mean this was sosmething rather basic but for the sake of giving it a reason and stuff il go with it . 
+
+In regards to the nn.Linear - we have this to crease a linear function taht allows us to form a layer that links everythigntigether . 
+
+with that being sdaid, all the given data is bing parsed down towards the first few lines,m within the in features and the parameters, that would dictate the feature size of teh given inputs and values that it has . 
+
+Out features, the the putp[uts, are the values ahte parameters that dictate teh feature size of the output tensor, when we are decoding it, we are saying he we want you to give us the data that we had decoded a while back . ]
+
+When i was using this, i used teh mean squared loss function - which is used similar to teh entropy values that we have . :
+
+
+
+
+
