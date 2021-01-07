@@ -13,10 +13,9 @@ import numpy as np
 import torch
 import torchvision
 from frosch import hook
+from NeuralNet import Net
 from pprintpp import pprint as pp
 from torchvision import datasets, transforms
-
-from NeuralNet import Net
 
 
 def data_set():
