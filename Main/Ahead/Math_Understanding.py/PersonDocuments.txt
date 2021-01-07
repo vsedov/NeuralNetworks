@@ -31,6 +31,12 @@ In this case, Pd [x] of f(x,y) =y
 
  the partial dx value of what ever we havem wuth resepct
  to x, would equal y 
- and a partial dx with respect to y woudl equal to x 
+ and a partial dx with respect to y woudl equal x 
+
+ Here is some further reason for how this owuld work, for
+ ease of use and understanding . 
+
+ Because i can get it, it can seem some what annoying if you 
+ dont know whats going on 
 
  
