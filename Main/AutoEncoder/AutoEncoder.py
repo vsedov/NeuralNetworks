@@ -127,9 +127,8 @@ def main() -> None:
             recon = net(test_examples)
             break
 
-
-    # This code is a god teir piece of code 
-    # That would allow one to see what is goign on . 
+    # This code is a god teir piece of code
+    # That would allow one to see what is goign on .
     with torch.no_grad():
         number = 10
         plt.figure(figsize=(20, 4))
