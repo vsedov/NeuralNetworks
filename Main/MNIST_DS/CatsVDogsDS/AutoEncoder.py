@@ -9,6 +9,7 @@ __author__ = "Viv Sedov"
 __email__ = "viv.sb@hotmail.com"
 
 import logging
+from dataclasses import dataclass
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -66,22 +67,31 @@ def main() -> None:
         device = torch.device("cpu")
         print("On Cpu ")
 
-    train = datasets.MNIST(
-        "",
-        train=True,
-        download=True,
-        transform=transforms.Compose([transforms.ToTensor()]),
-    )
+    REBUILD_DATA = False
+    net = AutoEncoder().to(device)
+    print(net)
 
-    test = datasets.MNIST(
-        "",
-        train=False,
-        download=True,
-        transform=transforms.Compose([transforms.ToTensor()]),
-    )
+    training_data = np.load("training_data.npy", allow_pickle=True)
+    print(len(training_data))
 
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    print(device)
+    optimizer = optim.Adam(net.parameters(), lr=0.001)
+    loss_function = nn.MSELoss()
+
+    X = torch.Tensor([i[0] for i in training_data]).view(-1, 50, 50)
+    X = X / 255.0
+    y = torch.Tensor([i[1] for i in training_data])
+
+    VAL_PCT = 0.1  # lets reserve 10% of our data for validation
+    val_size = int(len(X) * VAL_PCT)
+
+    train_X = X[:-val_size]
+    train_y = y[:-val_size]
+
+    test_X = X[-val_size:]
+    test_y = y[-val_size:]
+
+    BATCH_SIZE = 256
+    EPOCHS = 10
 
     net = AutoEncoder(inputs=784).to(device)
 
@@ -127,9 +137,6 @@ def main() -> None:
             recon = net(test_examples)
             break
 
-
-    # This code is a god teir piece of code 
-    # That would allow one to see what is goign on . 
     with torch.no_grad():
         number = 10
         plt.figure(figsize=(20, 4))
