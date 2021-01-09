@@ -4,53 +4,62 @@
 #
 # Copyright © 2021-01-07 Viv Sedov
 #
-# File Name: AutoEncoder.py
+# File Name: AutoEncoder_test.py
 __author__ = "Viv Sedov"
 __email__ = "viv.sb@hotmail.com"
 
 import logging
 
 import matplotlib.pyplot as plt
-import numpy as np
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 import torch.optim as optim
 import torchvision
 from frosch import hook
-from pprintpp import pprint as pp
 from torchvision import datasets, transforms
 from tqdm import tqdm
 
-torch.cuda.set_device(0)
 logging.basicConfig(filename="AutoEncoder.log", level=logging.DEBUG)
 
+torch.device("cuda:0")
 
-class AutoEncoder(nn.Module):
+
+class AE(nn.Module):
     def __init__(self, inputs):
         super().__init__()
+        self.encoder = nn.Sequential(
+            nn.Linear(inputs, 512),
+            nn.LeakyReLU(),
+            nn.Linear(512, 256),
+            nn.LeakyReLU(),
+            nn.Linear(256, 128),
+            nn.LeakyReLU(),
+            nn.Linear(128, 64),
+            nn.LeakyReLU(),
+            nn.Linear(64, 32),
+            nn.LeakyReLU(),
+            nn.Linear(32, 16),
+            nn.LeakyReLU(),
+        )
+        self.decoder = nn.Sequential(
+            nn.Linear(16, 32),
+            nn.LeakyReLU(),
+            nn.Linear(32, 64),
+            nn.LeakyReLU(),
+            nn.Linear(64, 128),
+            nn.LeakyReLU(),
+            nn.Linear(128, 256),
+            nn.LeakyReLU(),
+            nn.Linear(256, 512),
+            nn.LeakyReLU(),
+            nn.Linear(512, inputs),
+            nn.LeakyReLU(),
+        )
 
-        # This is quite basic but why not, just go with teh flow
-        self.encoder_hidden = nn.Linear(inputs, 128)
-        self.encoder_output = nn.Linear(128, 64)
-
-        self.encoder_output1 = nn.Linear(64, 32)
-        self.decoder_output1 = nn.Linear(32, 64)
-
-        self.decoder_hidden = nn.Linear(64, 128)
-        self.decoder_output = nn.Linear(128, inputs)
-
-    # Another qite basic forward pass
-    def forward(self, inputs: torch.Tensor) -> nn:
-        inputs = F.leaky_relu(self.encoder_hidden(inputs))
-        inputs = F.leaky_relu(self.encoder_output(inputs))
-
-        inputs = torch.sigmoid(self.encoder_output1(inputs))
-        inputs = torch.sigmoid(self.decoder_output1(inputs))
-
-        inputs = F.leaky_relu(self.decoder_hidden(inputs))
-        inputs = F.leaky_relu(self.decoder_output(inputs))
-        return inputs
+    def forward(self, inputs):
+        encode = self.encoder(inputs)
+        decode = self.decoder(encode)
+        return decode
 
 
 def main() -> None:
@@ -58,15 +67,15 @@ def main() -> None:
     print(device)
 
     device = torch.device("cuda:0")
-    print(device)
+    print("On Gpu")
 
-    if torch.cuda.is_available():
-        device = torch.device("cuda:0")
-        print("On Gpu")
-    else:
-
-        device = torch.device("cpu")
-        print("On Cpu ")
+    # Increase Guasian Blur
+    transform = transforms.Compose(
+        [
+            transforms.GaussianBlur(11, sigma=(0.1, 3.5)),
+            transforms.ToTensor(),
+        ]
+    )
 
     train = datasets.MNIST(
         "",
@@ -79,45 +88,46 @@ def main() -> None:
         "",
         train=False,
         download=True,
-        transform=transforms.Compose([transforms.ToTensor()]),
+        transform=transform,
     )
 
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    print(device)
+    net = AE(inputs=784)
+    net = net.cuda()
 
-    net = AutoEncoder(inputs=784).to(device)
-
+    print(torch.cuda.is_initialized())
     # Optimiser, which im currently coding a manual version of it .
+
+    print(torch.cuda.current_device())
 
     optimiser = optim.Adam(net.parameters(), lr=1e-3)
 
     loss_function = nn.MSELoss()
 
     trainset = torch.utils.data.DataLoader(
-        train, batch_size=512, shuffle=True, num_workers=4, pin_memory=True
+        train, batch_size=256, shuffle=True, num_workers=4, pin_memory=True
     )
-    # testset = torch.utils.data.DataLoader(test, batch_size=10, shuffle=False)
+    testset = torch.utils.data.DataLoader(test, batch_size=10, shuffle=False)
 
     test_examples = None
 
-    epoch = 50
+    epoch = 100
 
-    testset = torch.utils.data.DataLoader(train, batch_size=10, shuffle=False)
+    for epoch in tqdm(range(epoch)):
 
-    for epoch in range(epoch):
         loss_count = 0
         for data, _ in trainset:
             data = data.view(-1, 784)
-            data = data.to(device)
+
+            data = data.cuda()
 
             optimiser.zero_grad()  # What this should be linked to ?
-            output = net(data).to(device)
+            output = net(data)
+            output.cuda()
 
             train_loss = loss_function(output, data)
             train_loss.backward()
             optimiser.step()
             loss_count += train_loss.item()
-
         print(
             f"epoch {epoch +1 } / {epoch} loss = {loss_count} and given loss is {train_loss}"
         )
@@ -127,6 +137,7 @@ def main() -> None:
     with torch.no_grad():
         for data in testset:
             data = data[0]
+            data = data.cuda()
             test_examples = data.view(-1, 784).to(device)
             recon = net(test_examples)
             break
@@ -142,7 +153,6 @@ def main() -> None:
             plt.imshow(test_examples[i].cpu().numpy().reshape(28, 28))
             plotter.get_xaxis().set_visible(False)
             plotter.get_yaxis().set_visible(False)
-            plt.gray()
             # display reconstruction
             plotter = plt.subplot(2, number, i + 1 + number)
             plt.imshow(recon[i].cpu().numpy().reshape(28, 28))
