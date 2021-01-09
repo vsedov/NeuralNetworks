@@ -1,3 +1,17 @@
+#! /usr/bin/env python3
+# -- coding: utf-8 --
+# vim:fenc=utf-8
+#
+# Copyright © 2021-01-09 Viv Sedov
+#
+# File Name: latentRep.py
+__author__ = "Viv Sedov"
+__email__ = "viv.sb@hotmail.com"
+
+import numpy as np
+from frosch import hook
+from pprintpp import pprint as pp
+
 import torch.nn as nn
 
 
@@ -38,10 +52,15 @@ class AE(nn.Module):
         decode = self.dec(encode)
         return decode
 
+    def train(self, x):
+        pass
 
-def main():
-    batch_size = 32
-    lr = 1e-2  # learning rate
-    w_d = 1e-5  # weight decay
-    momentum = 0.9
-    epochs = 15
+
+def main() -> None:
+
+    pass
+
+
+if __name__ == "__main__":
+    hook()
+    main()

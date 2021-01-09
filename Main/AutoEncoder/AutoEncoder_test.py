@@ -72,7 +72,7 @@ def main() -> None:
     # Increase Guasian Blur
     transform = transforms.Compose(
         [
-            transforms.GaussianBlur(11, sigma=(0.1, 3.5)),
+            transforms.GaussianBlur(11, sigma=(0.1, 2.7)),
             transforms.ToTensor(),
         ]
     )
@@ -104,18 +104,18 @@ def main() -> None:
     loss_function = nn.MSELoss()
 
     trainset = torch.utils.data.DataLoader(
-        train, batch_size=256, shuffle=True, num_workers=4, pin_memory=True
+        train, batch_size=512, shuffle=True, num_workers=4, pin_memory=True
     )
     testset = torch.utils.data.DataLoader(test, batch_size=10, shuffle=False)
 
     test_examples = None
 
-    epoch = 100
+    epoch = 1000
 
-    for epoch in tqdm(range(epoch)):
+    for epoch in range(epoch):
 
         loss_count = 0
-        for data, _ in trainset:
+        for data, _ in tqdm(trainset):
             data = data.view(-1, 784)
 
             data = data.cuda()
@@ -129,7 +129,7 @@ def main() -> None:
             optimiser.step()
             loss_count += train_loss.item()
         print(
-            f"epoch {epoch +1 } / {epoch} loss = {loss_count} and given loss is {train_loss}"
+            f"epoch {epoch +1 } / {100} loss = {loss_count} and given loss is {train_loss}"
         )
 
     test_examples = None
