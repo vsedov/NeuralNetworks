@@ -110,7 +110,7 @@ def main() -> None:
 
     test_examples = None
 
-    epoch = 1000
+    epoch = 100
 
     for epoch in range(epoch):
 

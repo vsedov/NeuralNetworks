@@ -1,0 +1,26 @@
+What i wnated to do is add some amount of blur such that the model is not just memorizing stuff , and more so figureing out what to do from the given functions . 
+For the most case as long as the blur isnt all too strong , it doesnt a pretty decent job and reconstructing that data.
+But as i had stated before , one of the issues with this is that it can onlydo so with similar data that it has had before . So this wouldnt be able to reconstruct an image of a shirt properly, youd get some deformed image . 
+
+
+
+
+
+THIS IS SOMETHING YOU WOULD HAVE TO WRITE: 
+
+Effects of the given batch size and what you woul dhave to do with that ifnfomatin .
+Having larger epoch, gave better generalization, and helped with having a larger batch size too  : though training 500, was rather long, even with cuda . 
+
+
+
+Though youd think having a larger batch size would be better but just ends up giving poor generelization, which is quite wierd . 
+I Tried both 512 and 256 - but got better results using 256 [this also occoured in decembember within my notes ]
+Though im not 100% sure why this is the case, (on my do list). 
+
+
+
+
+
+
+
+
