@@ -16,6 +16,8 @@ import torch.optim as optim
 from frosch import hook
 from tqdm import tqdm
 
+import matplotlib.pyplot as plt
+
 
 class Net(nn.Module):
     def __init__(self):
@@ -104,24 +106,27 @@ def main() -> None:
     test_X = X[-val_size:]
     test_y = y[-val_size:]
 
-    BATCH_SIZE = 256
-    EPOCHS = 10
+    BATCH_SIZE = 512
+    EPOCHS = 1000
 
     def train(net):
         for epoch in range(EPOCHS):
             for i in tqdm(range(0, len(train_X), BATCH_SIZE)):
-                # from 0, to the len of x, stepping BATCH_SIZE at a time. [:50] ..for now just to dev
-                # print(f"{i}:{i+BATCH_SIZE}")
-                batch_X = train_X[i : i + BATCH_SIZE].view(-1, 1, 50, 50)
-                batch_y = train_y[i : i + BATCH_SIZE]
-                batch_X, batch_y = batch_X.to(device), batch_y.to(device)
-                net.zero_grad()
+                try:
 
-                outputs = net(batch_X)
-                loss = loss_function(outputs, batch_y)
-                loss.backward()
-                optimizer.step()  # Does the update
+                    # from 0, to the len of x, stepping BATCH_SIZE at a time. [:50] ..for now just to dev
+                    # print(f"{i}:{i+BATCH_SIZE}")
+                    batch_X = train_X[i : i + BATCH_SIZE].view(-1, 1, 50, 50)
+                    batch_y = train_y[i : i + BATCH_SIZE]
+                    batch_X, batch_y = batch_X.to(device), batch_y.to(device)
+                    net.zero_grad()
 
+                    outputs = net(batch_X)
+                    loss = loss_function(outputs, batch_y)
+                    loss.backward()
+                    optimizer.step()  # Does the update
+                except Exception as e:
+                    pass
             print(f"Epoch: {epoch}. Loss: {loss *100}")
         print(loss)
 
@@ -138,16 +143,13 @@ def main() -> None:
                     correct += 1
                 total += 1
                 # This is one at a time .
-                # and this is not that great .
 
         print(round(correct / total, 3))
 
-    # this is the method that you would train that given data .
 
     train(net)
     test(net)
 
 
 if __name__ == "__main__":
-    hook()
     main()

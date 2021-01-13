@@ -8,6 +8,7 @@
 __author__ = "Viv Sedov"
 __email__ = "viv.sb@hotmail.com"
 
+#: Whole Cell
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -21,11 +22,12 @@ class Vectr3d:
     y: int
     z: int
 
-    def __post_init__(self):
-        self.x = self.y + self.z
-
 
 u = Vectr3d(10, 20, 10)
+
+
+def relu(inputs):
+    return np.max(inputs, 0)
 
 
 def forward():
@@ -94,10 +96,6 @@ def forward():
     print(x, w)
 
 
-def relu(inputs):
-    return np.max(inputs, 0)
-
-
 def main() -> None:
     forward()
 
@@ -106,15 +104,15 @@ if __name__ == "__main__":
     hook()
     main()
     """
-    Dataclasses very obsure subject than the other ones 
-    data classes are something ive grown in python . 
-    A data class is a class whose sole purpose is to hold data 
+    Dataclasses very obsure subject than the other ones
+    data classes are something ive grown in python .
+    A data class is a class whose sole purpose is to hold data
     the class will have variables than can be acced and written to but there is no extra logic to it .
 
-    So what does this do exactly ? 
-    You define things with name and type 
-    while the function of our class is limited, the point of the data class 
-    is to increase efficiency and reduce errors in your code . 
-    its much better to pass around a vector3d than a int variable , so having this is better . 
+    So what does this do exactly ?
+    You define things with name and type
+    while the function of our class is limited, the point of the data class
+    is to increase efficiency and reduce errors in your code .
+    its much better to pass around a vector3d than a int variable , so having this is better .
 
     """

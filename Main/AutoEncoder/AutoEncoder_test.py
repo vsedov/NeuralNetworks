@@ -110,15 +110,16 @@ def main() -> None:
 
     test_examples = None
 
-    epoch = 100
+    epoch = 500
 
     for epoch in range(epoch):
 
         loss_count = 0
         for data, _ in tqdm(trainset):
-            data = data.view(-1, 784)
 
             data = data.cuda()
+            data = data.view(-1, 784)
+
 
             optimiser.zero_grad()  # What this should be linked to ?
             output = net(data)

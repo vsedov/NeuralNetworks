@@ -100,7 +100,7 @@ def main() -> None:
 
     test_examples = None
 
-    epoch = 50
+    epoch = 20
 
     testset = torch.utils.data.DataLoader(train, batch_size=10, shuffle=False)
 
