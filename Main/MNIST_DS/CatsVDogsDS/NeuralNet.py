@@ -146,7 +146,6 @@ def main() -> None:
 
         print(round(correct / total, 3))
 
-
     train(net)
     test(net)
 

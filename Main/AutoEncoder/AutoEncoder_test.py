@@ -120,7 +120,6 @@ def main() -> None:
             data = data.cuda()
             data = data.view(-1, 784)
 
-
             optimiser.zero_grad()  # What this should be linked to ?
             output = net(data)
             output.cuda()
