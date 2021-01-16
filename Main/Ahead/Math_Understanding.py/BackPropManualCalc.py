@@ -30,6 +30,10 @@ def relu(inputs):
     return np.max(inputs, 0)
 
 
+def leaky_relu(inputs):
+    return np.max(0.01, inputs)
+
+
 def forward():
     x = [1, -2, 3]
     w = [-3, -1, 2]

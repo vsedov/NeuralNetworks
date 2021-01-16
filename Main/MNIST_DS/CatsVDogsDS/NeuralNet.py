@@ -8,6 +8,7 @@
 __author__ = "Viv Sedov"
 __email__ = "viv.sb@hotmail.com"
 
+import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torch.nn as nn
@@ -15,8 +16,6 @@ import torch.nn.functional as F
 import torch.optim as optim
 from frosch import hook
 from tqdm import tqdm
-
-import matplotlib.pyplot as plt
 
 
 class Net(nn.Module):
@@ -145,7 +144,6 @@ def main() -> None:
                 # This is one at a time .
 
         print(round(correct / total, 3))
-
 
     train(net)
     test(net)

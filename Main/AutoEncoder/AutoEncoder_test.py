@@ -41,6 +41,7 @@ class AE(nn.Module):
             nn.Linear(32, 16),
             nn.LeakyReLU(),
         )
+        # Make a conv2d layer, just for the sake of it .
         self.decoder = nn.Sequential(
             nn.Linear(16, 32),
             nn.LeakyReLU(),
@@ -110,7 +111,7 @@ def main() -> None:
 
     test_examples = None
 
-    epoch = 500
+    epoch = 50
 
     for epoch in range(epoch):
 
@@ -119,7 +120,6 @@ def main() -> None:
 
             data = data.cuda()
             data = data.view(-1, 784)
-
 
             optimiser.zero_grad()  # What this should be linked to ?
             output = net(data)
