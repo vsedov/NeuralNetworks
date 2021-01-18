@@ -101,6 +101,7 @@ def main() -> None:
     loss = loss_function.calculate(activation4.outputs, y)
     print("Loss : ", loss)
 
+    # This just compares those values with argmax
     def accuracy(X, y) -> float:
         x = np.argmax(X, axis=1)
         if len(y.shape) == 2:
