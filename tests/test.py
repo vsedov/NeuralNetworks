@@ -11,12 +11,11 @@ __email__ = "viv.sb@hotmail.com"
 
 import sys
 
+import torch.nn as nn
+import torch.nn.functional as F
 from frosch import hook
 
 hook()
-
-import torch.nn as nn
-import torch.nn.functional as F
 
 
 class Test(nn.Module):

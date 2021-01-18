@@ -8,9 +8,6 @@
 __author__ = "Viv Sedov"
 __email__ = "viv.sb@hotmail.com"
 
-#: Whole Cell
-from dataclasses import dataclass, field
-
 import numpy as np
 from frosch import hook
 from pprintpp import pprint as pp
@@ -53,7 +50,7 @@ def forward():
     drelu_dxw1 = drelu_dz * dsum_dxw1
     drelu_dxw2 = drelu_dz * dsum_dxw2
     drelu_db = drelu_dz * dsum_db
-    print("Relu Gradients : ", x := ([drelu_dxw0, drelu_dxw1, drelu_dxw2]))
+    print("Relu Gradients : ", ([drelu_dxw0, drelu_dxw1, drelu_dxw2]))
     print("\n")
     # Sumunation * x[i]w[i]
 
@@ -81,8 +78,8 @@ def forward():
     print("Original Weights", w, "\n")
     # Apply Fractional pointer within w and dw
     print("Partial Dw and Dx -> div 100")
-    print("Grad Dw ", [i * -0.001 for i in dw])
-    print("Grad Dx ", [i * -0.001 for i in dx])
+    print("Grad Dw ", [(i * -0.001, i) for i in dw])
+    print("Grad Dx ", [(i * -0.001, i) for i in dx])
 
     w[0] += -0.001 * dw[0]
     w[1] += -0.001 * dw[1]
