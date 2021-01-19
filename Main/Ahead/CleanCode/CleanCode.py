@@ -23,14 +23,23 @@ class DenseLayer:
         # If it is dying, but you can change that to a non zero
 
     def forward(self, inputs: list) -> np:
+        self.inputs = inputs
         self.outputs = np.dot(inputs, self.weights) + self.biases
 
-    # Very simple, but very nice to do as well .
+    def backward(self, dvalues):
+        self.dweights = np.dot(self.inputs.T, dvalues)
+        self.dbiases = np.sum(dvalues, axis=0, keepdims=True)
+
+        self.dinputs = np.dot(dvalues, self.dweights.T)
 
 
 class ActivationReLU:
     def forward(self, inputs: list) -> np:
         self.outputs = np.maximum(0, inputs)
+
+    def backward(self, dvalues):
+        self.dinputs = dvalues.copy()
+        self.dinputs[self.inputs <= 0] = 0
 
 
 class ActivationSoftMax:

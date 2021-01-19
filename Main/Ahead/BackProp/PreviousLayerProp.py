@@ -16,8 +16,10 @@ from pprintpp import pprint as pp
 def main() -> None:
     # For this purpose of this example
     # Vector of ones will be pased through
-    dvalues = np.array([[1, 1, 1]])
+    dvalues = np.array([[1, 1, 1], [2, 2, 2], [3, 3, 3]])
+    # So this would be the base layer, or what ever inofmation we have
 
+    # We have 4 inputs, and because of that we would have 4 weights
     weights = np.array(
         [[0.2, 0.8, -0.5, 1], [0.5, -0.91, 0.26, -0.5], [-0.26, -0.27, 0.17, 0.87]]
     )
@@ -65,9 +67,16 @@ def main() -> None:
             weights[3][2] * dvalues[0][2],
         ]
     )
-    print(weights[1][1])
+    # This is pretty much doing what this had done before
     print("\n")
-    pp([dx0, dx1, dx2, dx3])
+    dinputs = np.array([dx0, dx1, dx2, dx3])
+
+    pp(dinputs)
+
+    # This is the thing that you had learnt about the transpose
+    # Of the given value
+    doter = np.dot(dvalues, weights.T)
+    pp(doter)
 
 
 if __name__ == "__main__":
