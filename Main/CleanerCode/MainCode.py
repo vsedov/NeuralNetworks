@@ -35,9 +35,6 @@ class ActivationReLU:
 class ActivationSoftMax:
     def forward(self, inputs: list) -> np:
         expVal = np.exp(inputs - np.max(inputs, axis=1, keepdims=True))
-        # Cool this works - Take Value away and keeep that dimension .
-        # This prevents overflow error
-
         probability = expVal / np.sum(expVal, axis=1, keepdims=True)
 
         self.outputs = probability
@@ -51,6 +48,7 @@ def main() -> None:
     dense2 = DenseLayer(10, 5)
     dense3 = DenseLayer(5, 10)
     dense4 = DenseLayer(10, 3)
+
     # ^ Because classes is three
     activation1 = ActivationReLU()
     activation2 = ActivationReLU()
@@ -72,7 +70,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     hook()
-
-    # This does a defualt data type, for us, which is rather nice .
     nnfs.init()
     main()
