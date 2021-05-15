@@ -9,12 +9,10 @@
 __author__ = "Viv Sedov"
 __email__ = "viv.sb@hotmail.com"
 
-import better_exceptions
 import numpy as np
 from frosch import hook
 from pprintpp import pprint as pp
 
-better_exceptions.hook()
 hook()
 
 
