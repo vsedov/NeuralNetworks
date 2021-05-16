@@ -108,6 +108,7 @@ class Layer_Dense:  # making a new neural networks := Weights First -1<= x <=1
         self.biases = np.zeros(
             (1, n_neurons)
         )  # will be 1 by how many neurons that you have - Needs to be a tuple of those two
+        self.pointer = None
 
     def forward(self, inputs):  # This could be the training data
 

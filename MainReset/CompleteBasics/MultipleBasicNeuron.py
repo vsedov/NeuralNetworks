@@ -11,6 +11,8 @@ __email__ = "viv.sv@hotmail.com"
 import pyinspect as pi
 from icecream import ic
 
+import numpy as np
+
 
 def version1():
     inputs = [1, 2, 3, 2.5]
@@ -21,6 +23,8 @@ def version1():
     ]
 
     bias = [2, 3, 0.5]
+
+    print(np.dot(weights, inputs) + bias)
 
 
 def main():

@@ -6,7 +6,7 @@
 #
 # File Name: LnLogCrossEntropy.py
 __author__ = "Viv Sedov"
-__email__ = "viv.sb@hotmail.com"
+__email__ = "viv.sv@hotmail.com"
 
 import math
 
