@@ -11,16 +11,16 @@ __email__ = "viv.sb@hotmail.com"
 import logging
 
 import matplotlib.pyplot as plt
-import numpy as np
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+
 import torch.optim as optim
-import torchvision
 from frosch import hook
-from pprintpp import pprint as pp
+
+
 from torchvision import datasets, transforms
-from tqdm import tqdm
 
 torch.cuda.set_device(0)
 logging.basicConfig(filename="AutoEncoder.log", level=logging.DEBUG)
@@ -33,6 +33,7 @@ class AutoEncoder(nn.Module):
         # This is quite basic but why not, just go with teh flow
         self.encoder_hidden = nn.Linear(inputs, 128)
         self.encoder_output = nn.Linear(128, 64)
+        self.encoder = nn.Linear(64, 32)
 
         self.encoder_output1 = nn.Linear(64, 32)
         self.decoder_output1 = nn.Linear(32, 64)
@@ -75,12 +76,12 @@ def main() -> None:
         transform=transforms.Compose([transforms.ToTensor()]),
     )
 
-    test = datasets.MNIST(
-        "",
-        train=False,
-        download=True,
-        transform=transforms.Compose([transforms.ToTensor()]),
-    )
+    # test = datasets.MNIST(
+    #     "",
+    #     train=False,
+    #     download=True,
+    #     transform=transforms.Compose([transforms.ToTensor()]),
+    # )
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     print(device)
