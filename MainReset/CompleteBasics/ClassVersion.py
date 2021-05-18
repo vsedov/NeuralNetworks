@@ -8,12 +8,11 @@
 __author__ = "Viv Sedov"
 __email__ = "viv.sv@hotmail.com"
 
-import pyinspect as pi
 import nnfs
+import numpy as np
+import pyinspect as pi
 from nnfs.datasets import spiral_data
 from pprintpp import pprint as pp
-
-import numpy as np
 
 
 class LayerDense:

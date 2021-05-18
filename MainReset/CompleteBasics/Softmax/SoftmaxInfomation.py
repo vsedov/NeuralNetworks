@@ -80,8 +80,43 @@ def with_numpy_batch(layer_outputs: list) -> None:
     print("Normalized value: \n", exp_norm[:5], "\n")
 
     print(
-        "Sum of norm should equal to 1 -> \n", np.sum(exp_norm, axis=1, keepdims=True)
+        "Sum of norm should equal to 1 -> \n",
+        np.sum(exp_norm, axis=1, keepdims=True),
+        "\n",
     )
+
+
+def overflow_prevention(layer_output: list) -> None:
+    """
+    Overflow prevention - using V = U-Max(U)
+
+    Overflow prevention that is occoured before list gets expon
+
+    Parameters
+    ----------
+    layer_output : list
+        np array list
+    """
+
+    exp_val_overflow_protection = np.exp(
+        layer_output - np.max(layer_output, axis=1, keepdims=True)
+    )
+    print(
+        "Exponentiated values with overflow protection: \n",
+        exp_val_overflow_protection,
+        "\n",
+    )
+
+    exp_normalised = exp_val_overflow_protection / np.sum(
+        exp_val_overflow_protection, axis=1, keepdims=True
+    )
+
+    print("You notice that the values are the exact same as before:\n")
+    pp(exp_normalised)
+
+
+def exp_explosion(num: int = 1000):
+    return np.exp(num)
 
 
 def main() -> None:
@@ -100,6 +135,16 @@ def main() -> None:
         [[4.8, 1.21, 2.385], [8.9, -1.81, 0.2], [1.41, 1.051, 0.026]]
     )
     with_numpy_batch(layer_outputs_batch)
+    # ---------------------------------
+
+    # Run time error , causing explosion .
+    # ---------------------------------
+    # exp_explosion()
+    # ---------------------------------
+
+    # Overflow prevention
+    # ---------------------------------
+    overflow_prevention(layer_outputs_batch)
     # ---------------------------------
 
 
