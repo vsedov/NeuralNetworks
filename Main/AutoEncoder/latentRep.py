@@ -36,7 +36,6 @@ class AE(nn.Module):
             nn.Linear(16, 32),
             nn.ReLU(),
             nn.Linear(32, 64),
-
             nn.ReLU(),
             nn.Linear(64, 128),
             nn.ReLU(),
