@@ -12,7 +12,8 @@ import nnfs
 import numpy as np
 import pyinspect as pi
 from nnfs.datasets import spiral_data
-from pprintpp import pprint as pp
+
+nnfs.init()
 
 
 class LayerDense:
@@ -27,8 +28,14 @@ class LayerDense:
 
 
 class ActivationRelu:
-    def forward(self, inputs):
+    def forward(self, inputs: np.ndarray):
         self.output = np.maximum(0, inputs)
+
+
+class ActivationSoftMax:
+    def forward(self, inputs: np.ndarray):
+        exp_values = np.exp(inputs - np.max(inputs, axis=1, keepdims=True))
+        self.output = exp_values / np.sum(exp_values, axis=1, keepdims=True)
 
 
 def main() -> None:
@@ -36,17 +43,21 @@ def main() -> None:
     # y woudl be the classification that you are trying to get
     X, y = spiral_data(samples=100, classes=3)
 
-    # pp(X[:5])
-
     dense1 = LayerDense(2, 3)
     activation1 = ActivationRelu()
 
+    dense2 = LayerDense(3, 3)
+    activation2 = ActivationSoftMax()
+
     dense1.forward(X)
     activation1.forward(dense1.output)
-    pp(activation1.output[:5])
+
+    dense2.forward(activation1.output)
+    activation2.forward(dense2.output)
+
+    print(activation2.output[:5])
 
 
 if __name__ == "__main__":
     pi.install_traceback()
-    nnfs.init()
     main()

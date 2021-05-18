@@ -1,0 +1,1 @@
+$function={logsumexp(\x)=\log(\sum{\exp^{\x_i}}$
