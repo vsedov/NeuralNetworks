@@ -11,15 +11,11 @@ __email__ = "viv.sb@hotmail.com"
 import logging
 
 import matplotlib.pyplot as plt
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
 import torch.optim as optim
 from frosch import hook
-
-
 from torchvision import datasets, transforms
 
 torch.cuda.set_device(0)
