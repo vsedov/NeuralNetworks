@@ -55,7 +55,13 @@ def main() -> None:
     dense2.forward(activation1.output)
     activation2.forward(dense2.output)
 
-    print(activation2.output[:5])
+    print(
+        "Without Checking if they added up to one softmax: \n", activation2.output[:5]
+    )
+    print(
+        "\n, Checking that they would all added up to one: \n",
+        np.sum(activation2.output[:5], axis=1, keepdims=True),
+    )
 
 
 if __name__ == "__main__":
