@@ -66,6 +66,7 @@ def batch_data_with_numpy() -> np:
 
     neg_log = -np.log(correct_confidence)
     average_loss = np.mean(neg_log)
+    print(average_loss)
 
 
 def main() -> None:
