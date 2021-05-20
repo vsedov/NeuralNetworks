@@ -40,11 +40,11 @@ def np_loss() -> None:
 
 
 def batch_data() -> list:
-    print("\n")
+    print("With batch data \n")
     softmax_output = [[0.7, 0.1, 0.2], [0.1, 0.5, 0.4], [0.02, 0.9, 0.008]]
     class_targets = [0, 1, 1]  # dog, cat , cat
 
-    print(np.argmax(softmax_output, axis=1))
+    print("Arg max is ", np.argmax(softmax_output, axis=1))
 
     for targ_dix, distribution in zip(class_targets, softmax_output):
         print(distribution[targ_dix])
@@ -69,6 +69,7 @@ def batch_data_with_numpy() -> np:
 
 
 def main() -> None:
+    batch_data()
     batch_data_with_numpy()
 
 
