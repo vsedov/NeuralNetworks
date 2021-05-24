@@ -1,62 +1,10 @@
+import cv2
 import keras
+import numpy as np
 from keras import backend as K
 from keras.datasets import mnist
-from keras.layers import Conv2D, Dense, Dropout, Flatten, MaxPooling2D
-from keras.models import Sequential
-
-(x_train, y_train), (x_test, y_test) = mnist.load_data()
-
-img_rows, img_cols = 28, 28
-
-if K.image_data_format() == "channels_first":
-    x_train = x_train.reshape(x_train.shape[0], 1, img_rows, img_cols)
-    x_test = x_test.reshape(x_test.shape[0], 1, img_rows, img_cols)
-    input_shape = (1, img_rows, img_cols)
-else:
-    x_train = x_train.reshape(x_train.shape[0], img_rows, img_cols, 1)
-    x_test = x_test.reshape(x_test.shape[0], img_rows, img_cols, 1)
-    input_shape = (img_rows, img_cols, 1)
-
-x_train = x_train.astype("float32")
-x_test = x_test.astype("float32")
-x_train /= 255
-x_test /= 255
-
-import numpy as np
-
-temp = []
-for img in x_train:
-    t = []
-    for row in img:
-        for i in row:
-            t.append(i)
-    temp.append(t)
-x_train = []
-x_train = temp
-
-x_train = np.array(x_train)
-
-x_train = x_train.reshape(60000, 784)
-
-model = Sequential()
-model.add(Dense(784, activation="relu", input_dim=784))
-model.add(Dense(256, activation="relu"))
-model.add(Dense(128, activation="relu"))
-model.add(Dense(256, activation="relu"))
-model.add(Dense(784, activation="relu"))
-
-model.compile(
-    loss=keras.losses.mean_squared_error,
-    optimizer=keras.optimizers.RMSprop(lr=0.0001, rho=0.9, epsilon=None, decay=0.0),
-    metrics=["accuracy"],
-)
-
-model.fit(x_train, x_train, verbose=1, epochs=10, batch_size=256)
-model.save("C:\\Users\\Rohith\\Documents\\Rohith_Stuff\\Datasets\\auto_en.h5")
-# del model
-
-import cv2
-from keras.models import load_model
+from keras.layers import Dense
+from keras.models import Sequential, load_model
 
 model = load_model("C:\\Users\\Rohith\\Documents\\Rohith_Stuff\\Datasets\\auto_en.h5")
 
