@@ -40,14 +40,14 @@ class ActivationSoftMax:
 
 
 class Loss:
-    def accuracy(self, output: np.ndarray, class_target: np.ndarray):
+    def accuracy(self, output: np.ndarray, y: np.ndarray):
         # Index of all the highest values in axis=1 row form
 
         """Convert this infomation to sparse infomation"""
-        if len(class_target.shape) == 2:
-            class_target = np.argmax(class_target, axis=1)
+        if len(y.shape) == 2:
+            y = np.argmax(y, axis=1)
         #                   Predictions :
-        accuracy = np.mean((np.argmax(output, axis=1)) == class_target, keepdims=True)
+        accuracy = np.mean((np.argmax(output, axis=1)) == y, keepdims=True)
         return accuracy
 
     def caculate(self, outputs: np.ndarray, y: np.ndarray):
