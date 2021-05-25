@@ -47,7 +47,8 @@ class Loss:
         if len(y.shape) == 2:
             y = np.argmax(y, axis=1)
         #                   Predictions :
-        accuracy = np.mean((np.argmax(output, axis=1)) == y, keepdims=True)
+        sample = np.argmax(output, axis=1)
+        accuracy = np.mean(sample == y, keepdims=True)
         return accuracy
 
     def caculate(self, outputs: np.ndarray, y: np.ndarray):
