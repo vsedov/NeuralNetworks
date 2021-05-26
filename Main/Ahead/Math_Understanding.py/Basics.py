@@ -11,7 +11,6 @@ __email__ = "viv.sb@hotmail.com"
 import matplotlib.pyplot as plt
 import numpy as np
 from frosch import hook
-from pprintpp import pprint as pp
 
 
 def f(x):
@@ -42,17 +41,6 @@ def main() -> None:
 
         diriv = (y2 - y1) / (x2 - x1)
         b = y2 - diriv * x2
-
-        """
-        dy/dx -> diriv 
-        y = mx + c 
-        c = y - mx 
-        
-        # Wonder how partial dirv would work here 
-        tangent line is :
-        
-        mx* x1 + b  = y -> Tangehnt line
-        """
 
         def approximate_tangent_line(x, diriv):
             return (diriv * x) + y2 - diriv * x2
