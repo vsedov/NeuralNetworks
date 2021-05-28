@@ -24,23 +24,23 @@ class LayerDense:
 
         self.bias = np.zeros((1, n_neurons))
 
-    def forward(self, inputs: np.ndarray):
+    def forward(self, inputs: np.ndarray) -> None:
         self.output = np.dot(inputs, self.weights) + self.bias
 
 
 class ActivationRelu:
-    def forward(self, inputs: np.ndarray):
+    def forward(self, inputs: np.ndarray) -> None:
         self.output = np.maximum(0, inputs)
 
 
 class ActivationSoftMax:
-    def forward(self, inputs: np.ndarray):
+    def forward(self, inputs: np.ndarray) -> None:
         exp_values = np.exp(inputs - np.max(inputs, axis=1, keepdims=True))
         self.output = exp_values / np.sum(exp_values, axis=1, keepdims=True)
 
 
 class Loss:
-    def accuracy(self, output: np.ndarray, y: np.ndarray):
+    def accuracy(self, output: np.ndarray, y: np.ndarray) -> np.ndarray:
         # Index of all the highest values in axis=1 row form
 
         """Convert this infomation to sparse infomation"""
@@ -48,10 +48,10 @@ class Loss:
             y = np.argmax(y, axis=1)
         #                   Predictions :
         sample = np.argmax(output, axis=1)
-        accuracy = np.mean(sample == y, keepdims=True)
-        return accuracy
+        # Accuracy
+        return np.mean(sample == y, keepdims=True)
 
-    def caculate(self, outputs: np.ndarray, y: np.ndarray):
+    def caculate(self, outputs: np.ndarray, y: np.ndarray) -> np.ndarray:
         """
         Caculate Loss mean
 
@@ -68,8 +68,8 @@ class Loss:
         Returns : mean loss
         """
         sample_losses = self.forward(outputs, y)
-        data_loss = np.mean(sample_losses)
-        return data_loss
+        # DataLoss
+        return np.mean(sample_losses)
 
 
 # Each main loss function will be using the loss caculation
@@ -82,7 +82,7 @@ class LossCategoricalCrossEntropy(Loss):
         L(x,Y) => -∑ (x∙ln(Y))
     """
 
-    def forward(self, y_pred: np.ndarray, y_true: np.ndarray):
+    def forward(self, y_pred: np.ndarray, y_true: np.ndarray) -> np.ndarray:
         """
         y_pred = Y :: y_true = x
         """
@@ -99,8 +99,8 @@ class LossCategoricalCrossEntropy(Loss):
             correct_confidence = np.sum(y_pred_clipped * y_true, axis=1)
 
         pp(correct_confidence[:10])
-        negative_likehood = -np.log(correct_confidence)
-        return negative_likehood
+        # Neg likegood
+        return -np.log(correct_confidence)
 
 
 def main() -> None:

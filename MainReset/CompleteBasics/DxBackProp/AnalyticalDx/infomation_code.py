@@ -12,8 +12,11 @@ import nnfs
 import pyinspect as pi
 
 
-def main() -> None:
-    pass
+def main() -> int:
+    print(list(map(lambda x: x * 10, range(1, 10))))
+    # Another way of doing this coudl be with teh following
+
+    print([i * 10 for i in range(1, 10)])
 
 
 if __name__ == "__main__":
