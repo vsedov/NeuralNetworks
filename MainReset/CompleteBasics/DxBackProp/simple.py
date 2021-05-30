@@ -1,6 +1,4 @@
-#! /usr/bin/env python3
-# -*- coding: utf-8 -*-
-# vim:fenc=utf-8
+#! /usr/bin/env python3 # -*- coding: utf-8 -*- vim:fenc=utf-8
 #
 # Copyright © Viv Sedov
 #
@@ -51,7 +49,7 @@ def simple_understanding() -> None:
 
         to_plot = [x1 - 0.9, x1, x1 + 0.9]
         plt.plot(
-            [point for point in to_plot],
+            list(to_plot),
             [approximate_tangent_line(point, diriv) for point in to_plot],
         )
     plt.show()
