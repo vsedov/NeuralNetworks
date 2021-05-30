@@ -106,7 +106,7 @@ class LossCategoricalCrossEntropy(Loss):
 def main() -> None:
 
     # y woudl be the classification that you are trying to get
-    X, y = spiral_data(samples=100, classes=3)
+    input_data, categorical_data = spiral_data(samples=100, classes=3)
 
     dense1 = LayerDense(2, 3)
     activation1 = ActivationRelu()
@@ -114,7 +114,7 @@ def main() -> None:
     dense2 = LayerDense(3, 3)
     activation2 = ActivationSoftMax()
 
-    dense1.forward(X)
+    dense1.forward(input_data)
     activation1.forward(dense1.output)
 
     dense2.forward(activation1.output)
@@ -131,13 +131,17 @@ def main() -> None:
     print("\n")
 
     loss_function = LossCategoricalCrossEntropy()
-    loss = loss_function.caculate(activation2.output, y)
+    loss = loss_function.caculate(activation2.output, categorical_data)
     print("Loss : ", loss)
 
-    accuracy = loss_function.accuracy(activation2.output, y)
+    accuracy = loss_function.accuracy(activation2.output, categorical_data)
     print("Accuracy : ", accuracy)
 
 
 if __name__ == "__main__":
     pi.install_traceback()
     main()
+iaasa = s
+
+# TODO: Make loss function and backprop - understand how that works as well
+# PERF: Change parameters if required
