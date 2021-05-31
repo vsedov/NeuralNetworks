@@ -27,6 +27,7 @@ def main() -> None:
 
     # We have to do relu to the functional
     y = max(z, 0)
+    print("before y ", y)
 
     # ----------------------------------------------------------------
     # Doing the backwards pass  Single neuron back prop
@@ -47,7 +48,6 @@ def main() -> None:
     dsum_dxw2 = 1
     dsum_db = 1
 
-    # HACK: this can be implimented better for now this is for demonstration
     drelu_dxw0 = drelu_dz * dsum_dxw0
     drelu_dxw1 = drelu_dz * dsum_dxw1
     drelu_dxw2 = drelu_dz * dsum_dxw2
@@ -79,13 +79,47 @@ def main() -> None:
 
     drelu_dw0 = drelu_dxw0 * dmul_dw0
     drelu_dw1 = drelu_dxw1 * dmul_dw1
-    drelu_dw2 = drelu_dx0 * dmul_dw2
+    drelu_dw2 = drelu_dxw2 * dmul_dw2
 
-    # weights
-    print("Original Input ", x, "Weights :", w)
     print("input : ", [drelu_dx0, drelu_dx1, drelu_dx2])
 
     print("weights : ", [drelu_dw0, drelu_dw1, drelu_dw2])
+
+    gradient_inputs = [drelu_dx0, drelu_dx1, drelu_dx2]
+    gradient_weights = [drelu_dw0, drelu_dw1, drelu_dw2]
+    gradient_bias = 1
+
+    print("\n")
+
+    print(
+        "Grad Inputs : ",
+        gradient_inputs,
+        "Grad Weights : ",
+        gradient_weights,
+        "Grad Bias : ",
+        gradient_bias,
+        sep="\n",
+    )
+
+    # Applying the back prop on teh relu function
+
+    w[0] += -0.001 * gradient_weights[0]
+    w[1] += -0.001 * gradient_weights[1]
+    w[2] += -0.001 * gradient_weights[2]
+
+    b += -0.001 * gradient_bias
+
+    print(w, b)
+
+    xw0 = x[0] * w[0]
+    xw1 = x[1] * w[1]
+    xw2 = x[2] * w[2]
+
+    z = xw0 + xw1 + xw2 + b
+
+    # Neuron input is now lower using this chained method , where you have
+    # a gradient of data that you would have to pass down
+    print(max(z, 0))
 
 
 if __name__ == "__main__":

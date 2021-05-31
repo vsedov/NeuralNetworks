@@ -141,7 +141,6 @@ def main() -> None:
 if __name__ == "__main__":
     pi.install_traceback()
     main()
-iaasa = s
 
 # TODO: Make loss function and backprop - understand how that works as well
 # PERF: Change parameters if required
