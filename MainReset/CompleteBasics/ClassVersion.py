@@ -12,7 +12,6 @@ import nnfs
 import numpy as np
 import pyinspect as pi
 from nnfs.datasets import spiral_data
-from pprintpp import pprint as pp
 
 nnfs.init()
 
@@ -26,11 +25,24 @@ class LayerDense:
 
     def forward(self, inputs: np.ndarray) -> None:
         self.output = np.dot(inputs, self.weights) + self.bias
+        """Used For backprop"""
+        self.inputs = inputs
+
+    def backward(self, dvalues: np.ndarray) -> None:
+        self.dinputs = np.dot(dvalues, self.weights.T)
+        self.dweights = np.dot(self.inputs.T, dvalues)
+        self.dbias = np.sum(dvalues, axis=0, keepdims=True)
 
 
 class ActivationRelu:
     def forward(self, inputs: np.ndarray) -> None:
         self.output = np.maximum(0, inputs)
+        """For BackProp"""
+        self.inputs = inputs
+
+    def backward(self, dvalues: np.ndarray) -> None:
+        self.dinputs = dvalues.copy()
+        self.dinputs[self.inputs <= 0] = 0
 
 
 class ActivationSoftMax:
@@ -98,8 +110,6 @@ class LossCategoricalCrossEntropy(Loss):
         elif len(y_true.shape) == 2:
             correct_confidence = np.sum(y_pred_clipped * y_true, axis=1)
 
-        pp(correct_confidence[:10])
-        # Neg likegood
         return -np.log(correct_confidence)
 
 
@@ -116,6 +126,12 @@ def main() -> None:
 
     dense1.forward(input_data)
     activation1.forward(dense1.output)
+    print(
+        "\n\nActivation relu output for the first one -- Takes highest value in ",
+        "each set ,/ batch ",
+    )
+    print(activation1.output[:5])
+    print("\n\n")
 
     dense2.forward(activation1.output)
     activation2.forward(dense2.output)
