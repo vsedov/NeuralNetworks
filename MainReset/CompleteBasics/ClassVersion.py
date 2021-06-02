@@ -29,6 +29,7 @@ class LayerDense:
         self.inputs = inputs
 
     def backward(self, dvalues: np.ndarray) -> None:
+        """Used for BackProp"""
         self.dinputs = np.dot(dvalues, self.weights.T)
         self.dweights = np.dot(self.inputs.T, dvalues)
         self.dbias = np.sum(dvalues, axis=0, keepdims=True)
@@ -41,6 +42,7 @@ class ActivationRelu:
         self.inputs = inputs
 
     def backward(self, dvalues: np.ndarray) -> None:
+        """Used for BackProp"""
         self.dinputs = dvalues.copy()
         self.dinputs[self.inputs <= 0] = 0
 
