@@ -38,15 +38,13 @@ def main() -> None:
     print(np.diagflat(softmax_output) - np.dot(softmax_output, softmax_output.T))
 
 
-    
-
 if __name__ == "__main__":
     pi.install_traceback()
 
     main()
 
 
-def code_examples()->None:
+def code_examples() -> None:
     print("\n-----------")
     print("output of 0th index : ", softmax_output[0])
     print("Shape of the zeroth index :", softmax_output[0].shape)
