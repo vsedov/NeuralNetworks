@@ -57,7 +57,7 @@ class Loss:
     def accuracy(self, output: np.ndarray, y: np.ndarray) -> np.ndarray:
         # Index of all the highest values in axis=1 row form
 
-        """Convert this infomation to sparse infomation"""
+        """Convert infomation to sparse infomation and create a loss out of argmax"""
         if len(y.shape) == 2:
             y = np.argmax(y, axis=1)
         #                   Predictions :
@@ -107,6 +107,8 @@ class LossCategoricalCrossEntropy(Loss):
         # 1 and 0
         y_pred_clipped = np.clip(y_pred, 1e-7, 1 - 1e-7)
 
+        # shape -> 2 => [1,0]
+        # shape -> 1 => [[1,1],[0.1]]
         if len(y_true.shape) == 1:
             correct_confidence = y_pred_clipped[range(samples), y_true]
         elif len(y_true.shape) == 2:
@@ -114,16 +116,35 @@ class LossCategoricalCrossEntropy(Loss):
 
         return -np.log(correct_confidence)
 
+    def backward(self, dvalues: np.ndarray, y_true: np.ndarray) -> None:
+        """BackProp"""
+        # Number of samples
+        samples = len(dvalues)
+        # we would use the first sample to count the,
+        labels = len(dvalues[0])
+
+        # we have to make sure that y_true is sparse or not
+        if (y_true.shape) == 1:
+            y_true = np.eye(labels)[y_true]
+        # in most cases this will never be applied but its nice to know here
+
+        self.dinputs = -y_true / dvalues
+
+        # this is to Normalise everything
+        self.dinputs = self.dinputs / samples
+
 
 def main() -> None:
 
-    # y woudl be the classification that you are trying to get
+    # categorical_data woudl be the classification that you are trying to get
     input_data, categorical_data = spiral_data(samples=100, classes=3)
 
     dense1 = LayerDense(2, 3)
+    # ActivationRelu()
     activation1 = ActivationRelu()
 
     dense2 = LayerDense(3, 3)
+    # Final Pass through to three classifications
     activation2 = ActivationSoftMax()
 
     dense1.forward(input_data)
@@ -159,6 +180,3 @@ def main() -> None:
 if __name__ == "__main__":
     pi.install_traceback()
     main()
-
-# TODO: Make loss function and backprop - understand how that works as well
-# PERF: Change parameters if required
