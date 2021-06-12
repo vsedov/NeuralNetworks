@@ -53,8 +53,21 @@ class ActivationSoftMax:
         self.output = exp_values / np.sum(exp_values, axis=1, keepdims=True)
 
     def backward(self, dvalues: np.ndarray) -> None:
-        # should we do a complete loop on this @?
-        pass
+        # An Empty array
+        self.dinputs = np.empty_like(dvalues)
+
+        for index, (single_output, single_diriv) in enumerate(
+            zip(self.output, dvalues)
+        ):
+            self.dinputs[index] = np.dot(
+                self.jacobian(single_output.reshape(-1, 1)), single_diriv
+            )
+
+    @classmethod
+    def jacobian(cls, single_output: np.ndarray) -> np.ndarray:
+        return np.diagflat(single_output) - np.dot(
+            single_output, np.transpose(single_output)
+        )
 
 
 class Loss:

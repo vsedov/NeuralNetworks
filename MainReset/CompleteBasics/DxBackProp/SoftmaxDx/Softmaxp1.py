@@ -43,9 +43,23 @@ def main() -> None:
     )
     print(np.maximum(0, x))
 
-    """
-        TODO: Getter a better understanding of how the changes happen with the given
-    """
+    print("This is a better understanding bellow, if you are still confused")
+
+    print("\n\n\n\n")
+    softmax_output = np.array(([0.7, 0.1, 0.2])).reshape(-1, 1)
+    print(softmax_output.shape)
+    print(softmax_output.T.shape)
+    print(softmax_output, softmax_output.T)
+    row_eyth = np.eye(softmax_output.shape[0])
+    col_eyth = np.eye(np.transpose(softmax_output).shape[1])
+
+    print(row_eyth == col_eyth)
+
+    print(softmax_output * col_eyth)
+
+    print(np.dot(softmax_output.T, col_eyth))
+
+    print(2 * col_eyth)
 
 
 if __name__ == "__main__":
