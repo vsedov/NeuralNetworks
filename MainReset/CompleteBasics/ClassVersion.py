@@ -52,6 +52,10 @@ class ActivationSoftMax:
         exp_values = np.exp(inputs - np.max(inputs, axis=1, keepdims=True))
         self.output = exp_values / np.sum(exp_values, axis=1, keepdims=True)
 
+    def backward(self, dvalues: np.ndarray) -> None:
+        # should we do a complete loop on this @?
+        pass
+
 
 class Loss:
     def accuracy(self, output: np.ndarray, y: np.ndarray) -> np.ndarray:

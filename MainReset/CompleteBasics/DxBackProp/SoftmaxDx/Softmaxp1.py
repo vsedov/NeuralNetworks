@@ -35,10 +35,18 @@ def main() -> None:
     print("\n \n:Partial dx of softmax outputis ")
 
     #  At this point we are doing jacobian matrix caculation
-    print(np.diagflat(softmax_output) - np.dot(softmax_output, softmax_output.T))
+    print(x := (np.diagflat(softmax_output) - np.dot(softmax_output, softmax_output.T)))
 
+    print("\n")
+    print(
+        "Applying np.maxiumum to see - what values are positive and what values are not "
+    )
+    print(np.maximum(0, x))
 
-    
+    """
+        TODO: Getter a better understanding of how the changes happen with the given
+    """
+
 
 if __name__ == "__main__":
     pi.install_traceback()
@@ -46,7 +54,8 @@ if __name__ == "__main__":
     main()
 
 
-def code_examples()->None:
+def code_examples() -> None:
+    softmax_output = np.array([0.7, 0.1, 0.2])
     print("\n-----------")
     print("output of 0th index : ", softmax_output[0])
     print("Shape of the zeroth index :", softmax_output[0].shape)

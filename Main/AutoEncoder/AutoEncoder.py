@@ -11,9 +11,10 @@ __email__ = "viv.sb@hotmail.com"
 import logging
 
 import matplotlib.pyplot as plt
+import numpy as np
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
+import torch.nn.functional as f
 import torch.optim as optim
 from frosch import hook
 from torchvision import datasets, transforms
@@ -23,7 +24,7 @@ logging.basicConfig(filename="AutoEncoder.log", level=logging.DEBUG)
 
 
 class AutoEncoder(nn.Module):
-    def __init__(self, inputs):
+    def __init__(self, inputs: np.ndarray):
         super().__init__()
 
         # This is quite basic but why not, just go with teh flow
@@ -39,15 +40,14 @@ class AutoEncoder(nn.Module):
 
     # Another qite basic forward pass
     def forward(self, inputs: torch.Tensor) -> nn:
-        inputs = F.leaky_relu(self.encoder_hidden(inputs))
-        inputs = F.leaky_relu(self.encoder_output(inputs))
+        inputs = f.leaky_relu(self.encoder_hidden(inputs))
+        inputs = f.leaky_relu(self.encoder_output(inputs))
 
         inputs = torch.sigmoid(self.encoder_output1(inputs))
         inputs = torch.sigmoid(self.decoder_output1(inputs))
 
-        inputs = F.leaky_relu(self.decoder_hidden(inputs))
-        inputs = F.leaky_relu(self.decoder_output(inputs))
-        return inputs
+        inputs = f.leaky_relu(self.decoder_hidden(inputs))
+        return f.leaky_relu(self.decoder_output(inputs))
 
 
 def main() -> None:
