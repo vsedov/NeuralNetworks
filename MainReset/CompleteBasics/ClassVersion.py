@@ -160,18 +160,19 @@ class LossCategoricalCrossEntropy(Loss):
     def backward(self, dvalues: np.ndarray, y_true: np.ndarray) -> None:
         """BackProp"""
         # Number of samples
+
         samples = len(dvalues)
-        # we would use the first sample to count the,
+        # Number of labels in every sample
+        # We'll use the first sample to count them
         labels = len(dvalues[0])
 
-        # we have to make sure that y_true is sparse or not
-        if (y_true.shape) == 1:
+        # If labels are sparse, turn them into one-hot vector
+        if len(y_true.shape) == 1:
             y_true = np.eye(labels)[y_true]
-        # in most cases this will never be applied but its nice to know here
 
+        # Calculate gradient
         self.dinputs = -y_true / dvalues
-
-        # this is to Normalise everything
+        # Normalize gradient
         self.dinputs = self.dinputs / samples
 
 
@@ -218,6 +219,25 @@ def main() -> None:
     print("Accuracy : ", accuracy)
 
 
+def main2() -> None:
+    softmax_output = np.array([[0.7, 0.1, 0.2], [0.1, 0.5, 0.4], [0.02, 0.9, 0.008]])
+    class_targets = np.array([0, 1, 1])
+    softmax_loss = ActivationSoftMaxCCELoss()
+    softmax_loss.backward(softmax_output, class_targets)
+    dvalues1 = softmax_loss.dinputs
+
+    activation = ActivationSoftMax()
+    activation.output = softmax_output
+    loss = LossCategoricalCrossEntropy()
+    loss.backward(softmax_output, class_targets)
+    activation.backward(loss.dinputs)
+    dvalues2 = activation.dinputs
+
+    print(dvalues1)
+    print(dvalues2)
+
+
 if __name__ == "__main__":
     pi.install_traceback()
-    main()
+    # main()
+    main2()
