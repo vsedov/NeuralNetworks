@@ -52,22 +52,22 @@ class ActivationSoftMax:
         exp_values = np.exp(inputs - np.max(inputs, axis=1, keepdims=True))
         self.output = exp_values / np.sum(exp_values, axis=1, keepdims=True)
 
+    # This would be when you are parsing data down - without using the chain
+    # rule
     def backward(self, dvalues: np.ndarray) -> None:
         # An Empty array
         self.dinputs = np.empty_like(dvalues)
 
-        for index, (single_output, single_diriv) in enumerate(
+        for index, (single_output, single_dvalues) in enumerate(
             zip(self.output, dvalues)
         ):
             self.dinputs[index] = np.dot(
-                self.jacobian(single_output.reshape(-1, 1)), single_diriv
+                self.jacobian(single_output.reshape(-1, 1)), single_dvalues
             )
 
     @classmethod
     def jacobian(cls, single_output: np.ndarray) -> np.ndarray:
-        return np.diagflat(single_output) - np.dot(
-            single_output, np.transpose(single_output)
-        )
+        return np.diagflat(single_output) - np.dot(single_output, single_output.T)
 
 
 class Loss:
@@ -101,6 +101,30 @@ class Loss:
         sample_losses = self.forward(outputs, y)
         # DataLoss
         return np.mean(sample_losses)
+
+
+class ActivationSoftMaxCCELoss:
+    def __init__(self):
+        self.activation = ActivationSoftMax()
+        self.loss = LossCategoricalCrossEntropy()
+
+    def forward(self, inputs: np.ndarray, y_true: np.ndarray) -> np.ndarray:
+        self.activation.forward(inputs)
+        self.output = self.activation.output
+        return self.loss.caculate(self.output, y_true)
+
+    def backward(self, dvalues: np.ndarray, y_true: np.ndarray) -> None:
+        samples = len(dvalues)
+
+        # Recall jacobian matrix can be reshaped into 1 dimentional
+        if len(y_true.shape) == 2:
+            y_true = np.argmax(y_true, axis=1)
+
+        self.dinputs = dvalues.copy()
+
+        self.dinputs[range(samples), y_true] -= 1
+
+        self.dinputs = self.dinputs / samples
 
 
 # Each main loss function will be using the loss caculation
