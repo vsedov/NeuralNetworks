@@ -49,6 +49,7 @@ class ActivationRelu:
 
 class ActivationSoftMax:
     def forward(self, inputs: np.ndarray) -> None:
+        self.inputs = inputs
         exp_values = np.exp(inputs - np.max(inputs, axis=1, keepdims=True))
         self.output = exp_values / np.sum(exp_values, axis=1, keepdims=True)
 
@@ -57,10 +58,13 @@ class ActivationSoftMax:
     def backward(self, dvalues: np.ndarray) -> None:
         # An Empty array
         self.dinputs = np.empty_like(dvalues)
+        # print("\n all dvalues\n", dvalues, "\n")
 
         for index, (single_output, single_dvalues) in enumerate(
             zip(self.output, dvalues)
         ):
+            # print("Single dvalues ", single_dvalues, "\n")
+
             self.dinputs[index] = np.dot(
                 self.jacobian(single_output.reshape(-1, 1)), single_dvalues
             )
@@ -115,6 +119,7 @@ class ActivationSoftMaxCCELoss:
 
     def backward(self, dvalues: np.ndarray, y_true: np.ndarray) -> None:
         samples = len(dvalues)
+        # ic("Given values ", dvalues)
 
         # Recall jacobian matrix can be reshaped into 1 dimentional
         if len(y_true.shape) == 2:
@@ -122,7 +127,11 @@ class ActivationSoftMaxCCELoss:
 
         self.dinputs = dvalues.copy()
 
+        # ic("before", self.dinputs)
+        # This line here would convert that one hot vector encoding
         self.dinputs[range(samples), y_true] -= 1
+
+        # ic(self.dinputs)
 
         self.dinputs = self.dinputs / samples
 
@@ -166,7 +175,8 @@ class LossCategoricalCrossEntropy(Loss):
         # We'll use the first sample to count them
         labels = len(dvalues[0])
 
-        # If labels are sparse, turn them into one-hot vector
+        # If labels are sparse, turn them into one-hot vector - Len in this case
+        # very imporant - Rather jaring that i fucked this part up before
         if len(y_true.shape) == 1:
             y_true = np.eye(labels)[y_true]
 
@@ -219,25 +229,29 @@ def main() -> None:
     print("Accuracy : ", accuracy)
 
 
-def main2() -> None:
+def softmaxloss() -> None:
     softmax_output = np.array([[0.7, 0.1, 0.2], [0.1, 0.5, 0.4], [0.02, 0.9, 0.008]])
     class_targets = np.array([0, 1, 1])
     softmax_loss = ActivationSoftMaxCCELoss()
     softmax_loss.backward(softmax_output, class_targets)
     dvalues1 = softmax_loss.dinputs
 
+    print("\n-------------------\n")
+
     activation = ActivationSoftMax()
     activation.output = softmax_output
     loss = LossCategoricalCrossEntropy()
     loss.backward(softmax_output, class_targets)
+    # ic(loss.dinputs)
     activation.backward(loss.dinputs)
     dvalues2 = activation.dinputs
 
-    print(dvalues1)
-    print(dvalues2)
+    print("From 1 ", dvalues1)
+    print("\n-------------------\n")
+    print("From 2 ", dvalues2)
 
 
 if __name__ == "__main__":
     pi.install_traceback()
     # main()
-    main2()
+    softmaxloss()
