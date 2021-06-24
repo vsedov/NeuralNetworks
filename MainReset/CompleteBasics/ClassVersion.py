@@ -8,6 +8,7 @@
 __author__ = "Viv Sedov"
 __email__ = "viv.sv@hotmail.com"
 
+
 import nnfs
 import numpy as np
 import pyinspect as pi
@@ -59,7 +60,8 @@ class ActivationSoftMax:
         # An Empty array
         self.dinputs = np.empty_like(dvalues)
         # print("\n all dvalues\n", dvalues, "\n")
-
+        self.jacobian_matrix = []
+        print("----- Starting loop for Jacobian Matrix ----\n")
         for index, (single_output, single_dvalues) in enumerate(
             zip(self.output, dvalues)
         ):
@@ -69,13 +71,16 @@ class ActivationSoftMax:
                 self.jacobian(single_output.reshape(-1, 1)), single_dvalues
             )
 
+            self.jacobian_matrix.append(self.jacobian(single_output.reshape(-1, 1)))
+
     @classmethod
     def jacobian(cls, single_output: np.ndarray) -> np.ndarray:
         return np.diagflat(single_output) - np.dot(single_output, single_output.T)
 
 
 class Loss:
-    def accuracy(self, output: np.ndarray, y: np.ndarray) -> np.ndarray:
+    # A accuracywraper could be used here
+    def accuracy(self, output: np.ndarray, y: np.ndarray) -> str:
         # Index of all the highest values in axis=1 row form
 
         """Convert infomation to sparse infomation and create a loss out of argmax"""
@@ -84,7 +89,7 @@ class Loss:
         #                   Predictions :
         sample = np.argmax(output, axis=1)
         # Accuracy
-        return np.mean(sample == y, keepdims=True)
+        return f"Acc: {round(float(np.mean(sample == y, keepdims=True)), 5)} %"
 
     def caculate(self, outputs: np.ndarray, y: np.ndarray) -> np.ndarray:
         """
@@ -107,7 +112,7 @@ class Loss:
         return np.mean(sample_losses)
 
 
-class ActivationSoftMaxCCELoss:
+class ActivationSoftMaxCCELoss(Loss):
     def __init__(self):
         self.activation = ActivationSoftMax()
         self.loss = LossCategoricalCrossEntropy()
@@ -127,11 +132,7 @@ class ActivationSoftMaxCCELoss:
 
         self.dinputs = dvalues.copy()
 
-        # ic("before", self.dinputs)
-        # This line here would convert that one hot vector encoding
         self.dinputs[range(samples), y_true] -= 1
-
-        # ic(self.dinputs)
 
         self.dinputs = self.dinputs / samples
 
@@ -231,7 +232,7 @@ def main() -> None:
 
 def softmaxloss() -> None:
     softmax_output = np.array([[0.7, 0.1, 0.2], [0.1, 0.5, 0.4], [0.02, 0.9, 0.008]])
-    class_targets = np.array([0, 1, 1])
+    class_targets = np.array([0, 0, 1])
     softmax_loss = ActivationSoftMaxCCELoss()
     softmax_loss.backward(softmax_output, class_targets)
     dvalues1 = softmax_loss.dinputs
@@ -241,14 +242,16 @@ def softmaxloss() -> None:
     activation = ActivationSoftMax()
     activation.output = softmax_output
     loss = LossCategoricalCrossEntropy()
+
     loss.backward(softmax_output, class_targets)
-    # ic(loss.dinputs)
     activation.backward(loss.dinputs)
     dvalues2 = activation.dinputs
 
-    print("From 1 ", dvalues1)
+    print("From 1- Combined values \n", dvalues1)
     print("\n-------------------\n")
-    print("From 2 ", dvalues2)
+    print("From 2 - Sep loss with softmax \n", dvalues2)
+
+    print(softmax_loss.accuracy(softmax_output, class_targets))
 
 
 if __name__ == "__main__":
