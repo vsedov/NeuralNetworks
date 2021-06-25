@@ -190,44 +190,45 @@ class LossCategoricalCrossEntropy(Loss):
 def main() -> None:
 
     # categorical_data woudl be the classification that you are trying to get
-    input_data, categorical_data = spiral_data(samples=100, classes=3)
+    X, categorical_data = spiral_data(samples=100, classes=3)
 
-    dense1 = LayerDense(2, 3)
-    # ActivationRelu()
-    activation1 = ActivationRelu()
+    dense_1 = LayerDense(2, 3)
 
-    dense2 = LayerDense(3, 3)
-    # Final Pass through to three classifications
-    activation2 = ActivationSoftMax()
+    activation_1_relu = ActivationRelu()
 
-    dense1.forward(input_data)
-    activation1.forward(dense1.output)
-    print(
-        "\n\nActivation relu output for the first one -- Takes highest value in ",
-        "each set ,/ batch ",
-    )
-    print(activation1.output[:5])
-    print("\n\n")
+    dense_2 = LayerDense(3, 3)
 
-    dense2.forward(activation1.output)
-    activation2.forward(dense2.output)
+    loss_activation_ssl = ActivationSoftMaxCCELoss()
 
-    print(
-        "Without Checking if they added up to one softmax: \n",
-        limited := (activation2.output[:5]),
-    )
-    print(
-        "\n, Checking that they would all added up to one: \n",
-        np.sum(limited, axis=1, keepdims=True),
-    )
-    print("\n")
+    dense_1.forward(X)
 
-    loss_function = LossCategoricalCrossEntropy()
-    loss = loss_function.caculate(activation2.output, categorical_data)
-    print("Loss : ", loss)
+    activation_1_relu.forward(dense_1.output)
 
-    accuracy = loss_function.accuracy(activation2.output, categorical_data)
-    print("Accuracy : ", accuracy)
+    dense_2.forward(activation_1_relu.output)
+
+    loss = loss_activation_ssl.forward(dense_2.output, categorical_data)
+    soft_max_output = loss_activation_ssl.output
+    accuracy = loss_activation_ssl.accuracy(dense_2.output, categorical_data)
+
+    print("Loss: ", loss)
+    print(accuracy)
+    print("Softmax output ", np.sum(soft_max_output[:5], axis=1, keepdims=True))
+
+    # Doing the backward pass
+
+    # Loss and softmax with or together
+    loss_activation_ssl.backward(loss_activation_ssl.output, categorical_data)
+    dense_2.backward(loss_activation_ssl.dinputs)
+    activation_1_relu.backward(dense_2.dinputs)
+    dense_1.backward(activation_1_relu.dinputs)
+
+    print("\n-------------\nDense_1 Weights and Bias ---------\n")
+    print("Weights \n", dense_1.dweights, "\n")
+    print("Bias \n", dense_1.dbias, "\n")
+
+    print("\n-------------\nDense_2 Weights and Bias ---------\n")
+    print("Weights \n", dense_2.dweights, "\n")
+    print("Bias \n", dense_2.dbias, "\n")
 
 
 def softmaxloss() -> None:
@@ -251,10 +252,13 @@ def softmaxloss() -> None:
     print("\n-------------------\n")
     print("From 2 - Sep loss with softmax \n", dvalues2)
 
+    # For the basis of infomation , i made this output its infomation into
+    # a string , as i thought it would be nicer with respects to the given
+    # output
     print(softmax_loss.accuracy(softmax_output, class_targets))
 
 
 if __name__ == "__main__":
     pi.install_traceback()
-    # main()
-    softmaxloss()
+    main()
+    # softmaxloss()
