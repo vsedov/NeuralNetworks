@@ -12,6 +12,7 @@ __email__ = "viv.sv@hotmail.com"
 import nnfs
 import numpy as np
 import pyinspect as pi
+from icecream import ic
 from nnfs.datasets import spiral_data
 
 nnfs.init()
@@ -72,6 +73,7 @@ class ActivationSoftMax:
             )
 
             self.jacobian_matrix.append(self.jacobian(single_output.reshape(-1, 1)))
+        ic(self.jacobian_matrix)
 
     @classmethod
     def jacobian(cls, single_output: np.ndarray) -> np.ndarray:
@@ -89,7 +91,8 @@ class Loss:
         #                   Predictions :
         sample = np.argmax(output, axis=1)
         # Accuracy
-        return f"Acc: {round(float(np.mean(sample == y, keepdims=True)), 5)} %"
+        # return f"Acc: {round(float(np.mean(sample == y, keepdims=True)), 5)} %"
+        return np.mean(sample == y)
 
     def caculate(self, outputs: np.ndarray, y: np.ndarray) -> np.ndarray:
         """
@@ -187,10 +190,19 @@ class LossCategoricalCrossEntropy(Loss):
         self.dinputs = self.dinputs / samples
 
 
+class OptimizerSGD:
+    def __init__(self, learning_rate: int = 1.0):
+        self.learning_rate = learning_rate
+
+    def update_params(self, layer: LayerDense) -> None:
+        layer.weights += -self.learning_rate * layer.dweights
+        layer.bias += -self.learning_rate * layer.dbias
+
+
 def main() -> None:
 
     # categorical_data woudl be the classification that you are trying to get
-    X, categorical_data = spiral_data(samples=100, classes=3)
+    X, categorical_data = spiral_data(samples=100, classes=3)  # noqa:ignore
 
     dense_1 = LayerDense(2, 3)
 
@@ -231,6 +243,66 @@ def main() -> None:
     print("Bias \n", dense_2.dbias, "\n")
 
 
+def main_version_2() -> None:
+    # Create dataset
+    X, y = spiral_data(samples=100, classes=3)
+
+    # Create Dense layer with 2 input features and 64 output values
+    dense1 = LayerDense(2, 64)
+
+    # Create ReLU activation (to be used with Dense layer):
+    activation1 = ActivationRelu()
+
+    # Create second Dense layer with 64 input features (as we take output
+    # of previous layer here) and 3 output values (output values)
+    dense2 = LayerDense(64, 3)
+    # Create Softmax classifier's combined loss and activation
+    loss_activation = ActivationSoftMaxCCELoss()
+
+    # Create optimizer
+
+    optimizer = OptimizerSGD()
+    # Train in loop
+    for epoch in range(10001):
+
+        # Perform a forward pass of our training data through this layer
+        dense1.forward(X)
+
+        # Perform a forward pass through activation function
+        # takes the output of first dense layer here
+        activation1.forward(dense1.output)
+
+        # Perform a forward pass through second Dense layer
+        # takes outputs of activation function of first layer as inputs
+        dense2.forward(activation1.output)
+
+        # Perform a forward pass through the activation/loss function
+        # takes the output of second dense layer here and returns loss
+        loss = loss_activation.forward(dense2.output, y)
+
+        # Calculate accuracy from output of activation2 and targets
+        # calculate values along first axis
+        predictions = np.argmax(loss_activation.output, axis=1)
+        if len(y.shape) == 2:
+            y = np.argmax(y, axis=1)
+        accuracy = np.mean(predictions == y)
+
+        if not epoch % 100:
+            print(
+                f"epoch: {epoch}, " + f"acc: {accuracy:.3f}, " + f"loss: {loss:.3f}, "
+            )
+
+        # Backward pass
+        loss_activation.backward(loss_activation.output, y)
+        dense2.backward(loss_activation.dinputs)
+        activation1.backward(dense2.dinputs)
+        dense1.backward(activation1.dinputs)
+
+        # Update weights and biases
+        optimizer.update_params(dense1)
+        optimizer.update_params(dense2)
+
+
 def softmaxloss() -> None:
     softmax_output = np.array([[0.7, 0.1, 0.2], [0.1, 0.5, 0.4], [0.02, 0.9, 0.008]])
     class_targets = np.array([0, 0, 1])
@@ -260,5 +332,6 @@ def softmaxloss() -> None:
 
 if __name__ == "__main__":
     pi.install_traceback()
-    main()
+    main_version_2()
+    # softmaxloss()
     # softmaxloss()
