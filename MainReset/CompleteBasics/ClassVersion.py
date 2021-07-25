@@ -13,9 +13,7 @@ import nnfs
 import numpy as np
 import pyinspect as pi
 from icecream import ic
-from nnfs.datasets import spiral_data
-
-nnfs.init()
+from nnfs.datasets import spiral_data  # import nnfs
 
 
 class LayerDense:
@@ -191,12 +189,25 @@ class LossCategoricalCrossEntropy(Loss):
 
 
 class OptimizerSGD:
-    def __init__(self, learning_rate: int = 1.0):
+    def __init__(self, learning_rate: int = 1.0, decay: int = 0):
         self.learning_rate = learning_rate
+        self.current_learning_rate = learning_rate
+
+        self.decay = decay
+        self.iterations = 0
+
+    def pre_update_params(self) -> None:
+        if self.decay:
+            self.current_learning_rate = self.learning_rate * (
+                1.0 / (1.0 + self.decay * self.iterations)
+            )
 
     def update_params(self, layer: LayerDense) -> None:
-        layer.weights += -self.learning_rate * layer.dweights
-        layer.bias += -self.learning_rate * layer.dbias
+        layer.weights += np.multiply(-self.current_learning_rate, layer.dweights)
+        layer.bias += np.multiply(-self.current_learning_rate, layer.dbias)
+
+    def post_update_params(self) -> None:
+        self.iterations += 1
 
 
 def main() -> None:
@@ -256,7 +267,9 @@ def main_version_2() -> None:
 
     # Create optimizer
 
-    optimizer = OptimizerSGD()
+    # In this case 0.9 performs better for some reason
+    # optimizer = OptimizerSGD(learning_rate=0.86000)
+    optimizer = OptimizerSGD(decay=1e-3)
     # Train in loop
     for epoch in range(10001):
 
@@ -269,9 +282,19 @@ def main_version_2() -> None:
         loss = loss_activation.forward(dense2.output, y)
 
         accuracy = loss_activation.accuracy(loss_activation.output, y)
+
+        # predictions = np.argmax(loss_activation.output, axis=1)
+        # if len(y.shape) == 2:
+        #     y = np.argmax(y, axis=1)
+
+        # accuracy = np.mean(predictions == y)
+
         if not epoch % 100:
             print(
-                f"epoch: {epoch}, " + f"acc: {accuracy:.3f}, " + f"loss: {loss:.3f}, "
+                f"epoch: {epoch}, "
+                + f"acc: {accuracy:.3f}, "
+                + f"loss: {loss:.3f}, "
+                + f"lr: {optimizer.current_learning_rate}"
             )
 
         # Backward pass
@@ -281,8 +304,11 @@ def main_version_2() -> None:
         dense1.backward(activation1.dinputs)
 
         # Update weights and biases
+
+        optimizer.pre_update_params()
         optimizer.update_params(dense1)
         optimizer.update_params(dense2)
+        optimizer.post_update_params()
 
 
 def softmaxloss() -> None:
@@ -314,6 +340,7 @@ def softmaxloss() -> None:
 
 if __name__ == "__main__":
     pi.install_traceback()
+    nnfs.init()
     main_version_2()
     # softmaxloss()
     # softmaxloss()

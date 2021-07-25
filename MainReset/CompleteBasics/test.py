@@ -1,5 +1,5 @@
-import nnfs
 import numpy as np
+import nnfs
 from nnfs.datasets import spiral_data
 
 nnfs.init()
@@ -35,7 +35,6 @@ class Activation_ReLU:
 
     # Forward pass
     def forward(self, inputs):
-
         # Remember input values
         self.inputs = inputs
         # Calculate output values from inputs
@@ -82,13 +81,24 @@ class Activation_Softmax:
             jacobian_matrix = np.diagflat(single_output) - np.dot(
                 single_output, single_output.T
             )
-
             # Calculate sample-wise gradient
             # and add it to the array of sample gradients
             self.dinputs[index] = np.dot(jacobian_matrix, single_dvalues)
 
 
-# Common loss class
+# SGD optimizer
+class Optimizer_SGD:
+
+    # Initialize optimizer - set settings,
+    # learning rate of 1. is default for this optimizer
+    def __init__(self, learning_rate=1.0, decay=0.0, momentum=0.0):
+        self.learning_rate = learning_rate
+
+    def update_params(self, layer):
+        layer.weights += -np.multiply(self.learning_rate, layer.dweights)
+        layer.biases += -np.multiply(self.learning_rate, layer.dbiases)
+
+
 class Loss:
 
     # Calculates the data and regularization losses
@@ -113,7 +123,6 @@ class Loss_CategoricalCrossentropy(Loss):
 
         # Number of samples in a batch
         samples = len(y_pred)
-
         # Clip data to prevent division by 0
         # Clip both sides to not drag mean towards any value
         y_pred_clipped = np.clip(y_pred, 1e-7, 1 - 1e-7)
@@ -187,15 +196,6 @@ class Activation_Softmax_Loss_CategoricalCrossentropy:
         self.dinputs = self.dinputs / samples
 
 
-class OptimizerSGD:
-    def __init__(self, learning_rate: int = 1.0):
-        self.learning_rate = learning_rate
-
-    def update_params(self, layer: Layer_Dense) -> None:
-        layer.weights += -self.learning_rate * layer.dweights
-        layer.biases += -self.learning_rate * layer.dbiases
-
-
 # Create dataset
 X, y = spiral_data(samples=100, classes=3)
 
@@ -208,12 +208,11 @@ activation1 = Activation_ReLU()
 # Create second Dense layer with 64 input features (as we take output
 # of previous layer here) and 3 output values (output values)
 dense2 = Layer_Dense(64, 3)
-# Create Softmax cActivation_Softmax_Loss_CategoricalCrossentropy()kn
+# Create Softmax classifier's combined loss and activation
 loss_activation = Activation_Softmax_Loss_CategoricalCrossentropy()
 
-# Create optimizer
+optimizer = Optimizer_SGD(learning_rate=0.85)
 
-optimizer = OptimizerSGD()
 # Train in loop
 for epoch in range(10001):
 
@@ -248,6 +247,5 @@ for epoch in range(10001):
     activation1.backward(dense2.dinputs)
     dense1.backward(activation1.dinputs)
 
-    # Update weights and biases
     optimizer.update_params(dense1)
     optimizer.update_params(dense2)
