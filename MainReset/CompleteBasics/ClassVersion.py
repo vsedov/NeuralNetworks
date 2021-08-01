@@ -189,41 +189,42 @@ class LossCategoricalCrossEntropy(Loss):
 
 
 class OptimizerSGD:
-    def __init__(self, learning_rate: int = 1.0, decay: int = 0, momentum: int = 0):
+    def __init__(
+        self, learning_rate: float = 1.0, decay: float = 0.0, momentum: float = 0.0
+    ):
         self.learning_rate = learning_rate
         self.current_learning_rate = learning_rate
-
         self.decay = decay
         self.iterations = 0
         self.momentum = momentum
 
+    # Call once before any parameter updates
     def pre_update_params(self) -> None:
         if self.decay:
             self.current_learning_rate = self.learning_rate * (
                 1.0 / (1.0 + self.decay * self.iterations)
             )
 
+    # Update parameters
     def update_params(self, layer: LayerDense) -> None:
-
         if self.momentum:
-
             if not hasattr(layer, "weight_momentums"):
                 layer.weight_momentums = np.zeros_like(layer.weights)
-                layer.bias_momentum = np.zeros_like(layer.bias)
-            # Now we can pass through any other values required for this step
+                layer.bias_momentums = np.zeros_like(layer.bias)
 
             weight_updates = (
                 self.momentum * layer.weight_momentums
                 - self.current_learning_rate * layer.dweights
             )
+            layer.weight_momentums = weight_updates
 
             bias_updates = (
-                self.momentum * layer.bias_momentum
+                self.momentum * layer.bias_momentums
                 - self.current_learning_rate * layer.dbias
             )
+            layer.bias_momentums = bias_updates
 
         else:
-
             weight_updates = -self.current_learning_rate * layer.dweights
             bias_updates = -self.current_learning_rate * layer.dbias
 
@@ -293,7 +294,7 @@ def main_version_2() -> None:
 
     # In this case 0.9 performs better for some reason
     # optimizer = OptimizerSGD(learning_rate=0.86000)
-    optimizer = OptimizerSGD(decay=1e-3, momentum=0.5)
+    optimizer = OptimizerSGD(decay=1e-3, momentum=0.9)
     # Train in loop
     for epoch in range(10001):
 
