@@ -12,7 +12,7 @@ import pyinspect as pi
 
 def f(x: int) -> int:
     # f(x) = 2x²
-    return 2 * x ** 2
+    return 2 * x**2
 
 
 def parser() -> None:

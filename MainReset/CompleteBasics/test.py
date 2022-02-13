@@ -178,8 +178,8 @@ class Optimizer_Adagrad:
             layer.bias_cache = np.zeros_like(layer.biases)
 
         # Update cache with squared current gradients
-        layer.weight_cache += layer.dweights ** 2
-        layer.bias_cache += layer.dbiases ** 2
+        layer.weight_cache += layer.dweights**2
+        layer.bias_cache += layer.dbiases**2
 
         # Vanilla SGD parameter update + normalization
         # with square rooted cache
@@ -229,10 +229,10 @@ class Optimizer_RMSprop:
 
         # Update cache with squared current gradients
         layer.weight_cache = (
-            self.rho * layer.weight_cache + (1 - self.rho) * layer.dweights ** 2
+            self.rho * layer.weight_cache + (1 - self.rho) * layer.dweights**2
         )
         layer.bias_cache = (
-            self.rho * layer.bias_cache + (1 - self.rho) * layer.dbiases ** 2
+            self.rho * layer.bias_cache + (1 - self.rho) * layer.dbiases**2
         )
 
         # Vanilla SGD parameter update + normalization
@@ -304,11 +304,11 @@ class Optimizer_Adam:
         )
         # Update cache with squared current gradients
         layer.weight_cache = (
-            self.beta_2 * layer.weight_cache + (1 - self.beta_2) * layer.dweights ** 2
+            self.beta_2 * layer.weight_cache + (1 - self.beta_2) * layer.dweights**2
         )
 
         layer.bias_cache = (
-            self.beta_2 * layer.bias_cache + (1 - self.beta_2) * layer.dbiases ** 2
+            self.beta_2 * layer.bias_cache + (1 - self.beta_2) * layer.dbiases**2
         )
         # Get corrected cache
         weight_cache_corrected = layer.weight_cache / (
