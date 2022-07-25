@@ -50,7 +50,7 @@ def calCuFixShape() -> np:  # Shape Error
     output = np.dot(inputs, np.array(weights).T) + bias
 
     pp(output)
-    ic(len(inputs), len(weights) )
+    ic(len(inputs), len(weights))
 
     print("Going to the second layer \n")
 
@@ -90,10 +90,6 @@ def classer():
 
     np.random.seed(0)
 
-
-
-
-
     layer1 = Layer_Dense(4, 5)  # This is number of neurons .
     # the input has to be the same as the layer value
     layer2 = Layer_Dense(5, 6)
@@ -121,7 +117,6 @@ class Layer_Dense:  # making a new neural networks := Weights First -1<= x <=1
     def forward(self, inputs):  # This could be the training data
 
         self.output = np.dot(inputs, self.weights) + self.biases
-
 
 
 def main() -> None:

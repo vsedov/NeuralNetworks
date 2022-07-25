@@ -21,7 +21,6 @@ def dotProduct() -> np:
 def nump() -> np:
     a = [1, 2, 3, 4]
 
-
     # Expand dims , how you want to see the array it self.
     print(np.expand_dims(np.array(a), axis=0))
 

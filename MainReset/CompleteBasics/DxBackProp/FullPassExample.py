@@ -25,8 +25,9 @@ def main() -> None:
     inputs = np.array([[1, 2, 3, 2.5], [2, 5, -1, 2], [-1.5, 2.7, 3.3, -0.8]])
 
     # Recall we would have to make sure that the shape matches
-    weights = np.array([[0.2, 0.8, -0.5, 1], [0.5, -0.91, 0.26, -0.5],
-                        [-0.26, -0.27, 0.17, 0.87]]).T
+    weights = np.array(
+        [[0.2, 0.8, -0.5, 1], [0.5, -0.91, 0.26, -0.5], [-0.26, -0.27, 0.17, 0.87]]
+    ).T
 
     print("Original Weights ", weights)
     # we have one bias for each Neuron

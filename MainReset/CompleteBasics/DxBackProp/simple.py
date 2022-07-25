@@ -45,8 +45,7 @@ def simple_understanding() -> None:
 
         print(f" x = {x1} , y =  {y1}, {diriv}")
         print("\n")
-        print(f"{x1} {diriv} Bth value {b} -> ",
-              approximate_tangent_line(i, diriv))
+        print(f"{x1} {diriv} Bth value {b} -> ", approximate_tangent_line(i, diriv))
 
         to_plot = [x1 - 0.9, x1, x1 + 0.9]
         plt.plot(

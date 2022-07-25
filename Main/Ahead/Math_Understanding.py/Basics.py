@@ -27,7 +27,7 @@ def f(x):
 
 
 def d(x):
-    return 2 * x ** 2
+    return 2 * x**2
 
 
 def main() -> None:
