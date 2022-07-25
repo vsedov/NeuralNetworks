@@ -52,7 +52,7 @@ def main() -> None:
     layer_output = [random.randint(1, 10) for _ in range(10)]
 
     point = [pow(math.e, x) for x in layer_output]
-    final_val = ([x / sum(point) for x in point])
+    final_val = [x / sum(point) for x in point]
     print(final_val, sum(final_val))
 
 

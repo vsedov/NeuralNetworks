@@ -18,26 +18,24 @@ nnfs.init()
 
 
 class DenseLayer:
-
     def __init__(self, n_inputs: int, n_neurons: int):
         self.weights = 0.10 * np.random.randn(
-            n_inputs, n_neurons)  # This is just random generated results
+            n_inputs, n_neurons
+        )  # This is just random generated results
         self.biases = np.zeros(
-            (1, n_neurons
-             ))  # If it is dying, but you can change that to a non zero
+            (1, n_neurons)
+        )  # If it is dying, but you can change that to a non zero
 
     def forward(self, inputs: list) -> np:
         self.outputs = np.dot(inputs, self.weights) + self.biases
 
 
 class Activation_ReLU:
-
     def forward(self, inputs) -> None:
         self.output = np.maximum(0, inputs)
 
 
 class SoftmaxLayer:
-
     def forward(self, inputs) -> np:
         expValues = np.exp(inputs - np.max(inputs, axis=1, keepdims=True))
         self.outputs = expValues / np.sum(expValues, axis=1, keepdims=True)

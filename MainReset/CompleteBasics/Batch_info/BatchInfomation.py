@@ -35,8 +35,6 @@ def example_input_data():
     # Another layer , size.
 
 
-
-
 def main():
     example_input_data()
 

@@ -17,10 +17,10 @@ nnfs.init()
 
 
 class DenseLayer:
-
     def __init__(self, n_inputs: int, n_neurons: int):
         self.weights = 0.10 * np.random.randn(
-            n_inputs, n_neurons)  # This is just random generated results
+            n_inputs, n_neurons
+        )  # This is just random generated results
         self.biases = np.zeros((1, n_neurons))
 
     def forward(self, inputs: list) -> np:
@@ -28,7 +28,6 @@ class DenseLayer:
 
 
 class ActivationRelu:
-
     def forward(self, inputs: list) -> list:
         self.output = np.maximum(0, inputs)
 
