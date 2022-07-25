@@ -10,6 +10,7 @@ __email__ = "viv.sv@hotmail.com"
 
 import numpy as np
 import pyinspect as pi
+from icecream import ic
 
 
 def version_1() -> None:
@@ -23,6 +24,7 @@ def version_1() -> None:
     drelu = np.zeros_like(z)
     # If greater than zero, let it equal to one , else be zero
     drelu[z > 0] = 1
+    ic(drelu, z)
 
     print("Dirivative of relu ", drelu, sep="\n")
     print("\n")
@@ -48,7 +50,7 @@ def main() -> None:
 
     # version_1()
     # print("\n")
-    version_2()
+    version_1()
 
 
 if __name__ == "__main__":

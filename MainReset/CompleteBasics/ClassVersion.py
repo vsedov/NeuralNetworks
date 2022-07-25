@@ -8,7 +8,6 @@
 __author__ = "Viv Sedov"
 __email__ = "viv.sv@hotmail.com"
 
-
 import nnfs
 import numpy as np
 import pyinspect as pi
@@ -17,6 +16,7 @@ from nnfs.datasets import spiral_data  # import nnfs
 
 
 class LayerDense:
+
     def __init__(self, n_inputs: int, n_neurons: int):
         # weights are made for you - transpose not needed
         self.weights = 0.01 * np.random.randn(n_inputs, n_neurons)
@@ -36,6 +36,7 @@ class LayerDense:
 
 
 class ActivationRelu:
+
     def forward(self, inputs: np.ndarray) -> None:
         self.output = np.maximum(0, inputs)
         """For BackProp"""
@@ -48,6 +49,7 @@ class ActivationRelu:
 
 
 class ActivationSoftMax:
+
     def forward(self, inputs: np.ndarray) -> None:
         self.inputs = inputs
         exp_values = np.exp(inputs - np.max(inputs, axis=1, keepdims=True))
@@ -61,28 +63,27 @@ class ActivationSoftMax:
         # print("\n all dvalues\n", dvalues, "\n")
         self.jacobian_matrix = []
         print("----- Starting loop for Jacobian Matrix ----\n")
-        for index, (single_output, single_dvalues) in enumerate(
-            zip(self.output, dvalues)
-        ):
+        for index, (single_output,
+                    single_dvalues) in enumerate(zip(self.output, dvalues)):
             # print("Single dvalues ", single_dvalues, "\n")
 
             self.dinputs[index] = np.dot(
-                self.jacobian(single_output.reshape(-1, 1)), single_dvalues
-            )
+                self.jacobian(single_output.reshape(-1, 1)), single_dvalues)
 
-            self.jacobian_matrix.append(self.jacobian(single_output.reshape(-1, 1)))
+            self.jacobian_matrix.append(
+                self.jacobian(single_output.reshape(-1, 1)))
         ic(self.jacobian_matrix)
 
     @classmethod
     def jacobian(cls, single_output: np.ndarray) -> np.ndarray:
-        return np.diagflat(single_output) - np.dot(single_output, single_output.T)
+        return np.diagflat(single_output) - np.dot(single_output,
+                                                   single_output.T)
 
 
 class Loss:
     # A accuracywraper could be used here
     def accuracy(self, output: np.ndarray, y: np.ndarray) -> str:
         # Index of all the highest values in axis=1 row form
-
         """Convert infomation to sparse infomation and create a loss out of argmax"""
         if len(y.shape) == 2:
             y = np.argmax(y, axis=1)
@@ -114,6 +115,7 @@ class Loss:
 
 
 class ActivationSoftMaxCCELoss(Loss):
+
     def __init__(self):
         self.activation = ActivationSoftMax()
         self.loss = LossCategoricalCrossEntropy()
@@ -189,9 +191,11 @@ class LossCategoricalCrossEntropy(Loss):
 
 
 class OptimizerSGD:
-    def __init__(
-        self, learning_rate: float = 1.0, decay: float = 0.0, momentum: float = 0.0
-    ):
+
+    def __init__(self,
+                 learning_rate: float = 1.0,
+                 decay: float = 0.0,
+                 momentum: float = 0.0):
         self.learning_rate = learning_rate
         self.current_learning_rate = learning_rate
         self.decay = decay
@@ -202,8 +206,7 @@ class OptimizerSGD:
     def pre_update_params(self) -> None:
         if self.decay:
             self.current_learning_rate = self.learning_rate * (
-                1.0 / (1.0 + self.decay * self.iterations)
-            )
+                1.0 / (1.0 + self.decay * self.iterations))
 
     # Update parameters
     def update_params(self, layer: LayerDense) -> None:
@@ -212,16 +215,12 @@ class OptimizerSGD:
                 layer.weight_momentums = np.zeros_like(layer.weights)
                 layer.bias_momentums = np.zeros_like(layer.bias)
 
-            weight_updates = (
-                self.momentum * layer.weight_momentums
-                - self.current_learning_rate * layer.dweights
-            )
+            weight_updates = (self.momentum * layer.weight_momentums -
+                              self.current_learning_rate * layer.dweights)
             layer.weight_momentums = weight_updates
 
-            bias_updates = (
-                self.momentum * layer.bias_momentums
-                - self.current_learning_rate * layer.dbias
-            )
+            bias_updates = (self.momentum * layer.bias_momentums -
+                            self.current_learning_rate * layer.dbias)
             layer.bias_momentums = bias_updates
 
         else:
@@ -260,7 +259,8 @@ def main() -> None:
 
     print("Loss: ", loss)
     print(accuracy)
-    print("Softmax output ", np.sum(soft_max_output[:5], axis=1, keepdims=True))
+    print("Softmax output ", np.sum(soft_max_output[:5], axis=1,
+                                    keepdims=True))
 
     # Doing the backward pass
 
@@ -315,12 +315,9 @@ def main_version_2() -> None:
         # accuracy = np.mean(predictions == y)
 
         if not epoch % 100:
-            print(
-                f"epoch: {epoch}, "
-                + f"acc: {accuracy:.3f}, "
-                + f"loss: {loss:.3f}, "
-                + f"lr: {optimizer.current_learning_rate}"
-            )
+            print(f"epoch: {epoch}, " + f"acc: {accuracy:.3f}, " +
+                  f"loss: {loss:.3f}, " +
+                  f"lr: {optimizer.current_learning_rate}")
 
         # Backward pass
         loss_activation.backward(loss_activation.output, y)
@@ -337,7 +334,8 @@ def main_version_2() -> None:
 
 
 def softmaxloss() -> None:
-    softmax_output = np.array([[0.7, 0.1, 0.2], [0.1, 0.5, 0.4], [0.02, 0.9, 0.008]])
+    softmax_output = np.array([[0.7, 0.1, 0.2], [0.1, 0.5, 0.4],
+                               [0.02, 0.9, 0.008]])
     class_targets = np.array([0, 0, 1])
     softmax_loss = ActivationSoftMaxCCELoss()
     softmax_loss.backward(softmax_output, class_targets)

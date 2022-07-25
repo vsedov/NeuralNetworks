@@ -9,8 +9,8 @@ __author__ = "Viv Sedov"
 __email__ = "viv.sb@hotmail.com"
 
 import numpy as np
-from frosch import hook
 from pprintpp import pprint as pp
+from icecream import ic
 
 
 def calCu() -> np:  # Shape Error
@@ -50,7 +50,7 @@ def calCuFixShape() -> np:  # Shape Error
     output = np.dot(inputs, np.array(weights).T) + bias
 
     pp(output)
-    print(len(inputs), len(weights), sep="\n")
+    ic(len(inputs), len(weights) )
 
     print("Going to the second layer \n")
 
@@ -86,8 +86,13 @@ def classer():
     # Defining the two latent space
 
     # You can normalise this data as well and you can scale it -1 and +1
+    ic("In CLASS ")
 
     np.random.seed(0)
+
+
+
+
 
     layer1 = Layer_Dense(4, 5)  # This is number of neurons .
     # the input has to be the same as the layer value
@@ -101,6 +106,7 @@ def classer():
 
 class Layer_Dense:  # making a new neural networks := Weights First -1<= x <=1
     def __init__(self, n_inputs, n_neurons):
+        #
         self.weights = 0.10 * np.random.randn(
             n_inputs, n_neurons
         )  # we need to know the shape Size fo input and How many Neurons
@@ -108,11 +114,14 @@ class Layer_Dense:  # making a new neural networks := Weights First -1<= x <=1
         self.biases = np.zeros(
             (1, n_neurons)
         )  # will be 1 by how many neurons that you have - Needs to be a tuple of those two
-        self.pointer = None
+        # 1 * how many neurons do you have ?, you do not have to do it for the ammount of inputs.
+        # this allows us to avoid doing a transpose every time .
+        # ic(self.biases, self.biases.shape)
 
     def forward(self, inputs):  # This could be the training data
 
         self.output = np.dot(inputs, self.weights) + self.biases
+
 
 
 def main() -> None:
@@ -125,5 +134,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    hook(theme="fruity")
     main()

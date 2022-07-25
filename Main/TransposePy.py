@@ -60,5 +60,5 @@ if __name__ == "__main__":
 
     """
     Smaller values are better, and teh infomation, have a rand between neg 1 and pos 1
-    the weights are, amount of inputs, so like say you have some input,  and you have nNeurons for that input . 
+    the weights are, amount of inputs, so like say you have some input,  and you have nNeurons for that input .
    """

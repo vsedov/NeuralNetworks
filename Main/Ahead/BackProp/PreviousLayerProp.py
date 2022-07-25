@@ -6,10 +6,9 @@
 #
 # File Name: PreviousLayerProp.py
 __author__ = "Viv Sedov"
-__email__ = "viv.sb@hotmail.com"
+__email__ = "viv.sv@hotmail.com"
 
 import numpy as np
-from frosch import hook
 from pprintpp import pprint as pp
 
 

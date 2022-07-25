@@ -9,8 +9,7 @@ __author__ = "Viv Sedov"
 __email__ = "viv.sv@hotmail.com"
 
 import numpy as np
-import pyinspect as pi
-from icecream import ic
+from icecream import ic  # pyright:ignore
 
 
 def main() -> None:
@@ -26,14 +25,14 @@ def main() -> None:
     inputs = np.array([[1, 2, 3, 2.5], [2, 5, -1, 2], [-1.5, 2.7, 3.3, -0.8]])
 
     # Recall we would have to make sure that the shape matches
-    weights = np.array(
-        [[0.2, 0.8, -0.5, 1], [0.5, -0.91, 0.26, -0.5], [-0.26, -0.27, 0.17, 0.87]]
-    ).T
+    weights = np.array([[0.2, 0.8, -0.5, 1], [0.5, -0.91, 0.26, -0.5],
+                        [-0.26, -0.27, 0.17, 0.87]]).T
 
     print("Original Weights ", weights)
     # we have one bias for each Neuron
 
     bias = np.array([[2, 3, 0.5]])
+    print("Original Biases ", bias)
 
     # Now we would do a forward parse on each of these neruons
 
@@ -96,5 +95,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    pi.install_traceback()
     main()

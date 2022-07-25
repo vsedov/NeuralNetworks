@@ -22,13 +22,19 @@ def example_input_data():
         [-0.26, -0.27, 0.17, 0.87],
     ]
 
-    output1 = np.dot(inputs1, np.array(weights1).T) + ([2, 3, 0.5])
+    output1 = np.dot(np.array(inputs1), np.array(weights1).T) + [2, 3, 0.5]
     ic(output1)
     # you would also dont want to be repeating infomation
 
     # This is the batch of outputs
     # you have to transpose this infomation .
     #  when you ahve a batch as the shapes no longer match.
+
+    # You want everthing to match what you have at the given time .
+
+    # Another layer , size.
+
+
 
 
 def main():

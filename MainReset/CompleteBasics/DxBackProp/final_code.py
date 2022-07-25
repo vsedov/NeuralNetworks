@@ -51,15 +51,13 @@ class Activation_Softmax:
         self.dinputs = np.empty_like(dvalues)
 
         # Enumerate outputs and gradients
-        for index, (single_output, single_dvalues) in enumerate(
-            zip(self.output, dvalues)
-        ):
+        for index, (single_output,
+                    single_dvalues) in enumerate(zip(self.output, dvalues)):
             # Flatten output array
             single_output = single_output.reshape(-1, 1)
             # Calculate Jacobian matrix of the output
             jacobian_matrix = np.diagflat(single_output) - np.dot(
-                single_output, single_output.T
-            )
+                single_output, single_output.T)
 
             # Calculate sample-wise gradient
             # and add it to the array of sample gradients
@@ -166,7 +164,8 @@ class Activation_Softmax_Loss_CategoricalCrossentropy:
 
 
 def main() -> None:
-    softmax_output = np.array([[0.7, 0.1, 0.2], [0.1, 0.5, 0.4], [0.02, 0.9, 0.008]])
+    softmax_output = np.array([[0.7, 0.1, 0.2], [0.1, 0.5, 0.4],
+                               [0.02, 0.9, 0.008]])
     class_targets = np.array([0, 1, 1])
     softmax_loss = Activation_Softmax_Loss_CategoricalCrossentropy()
     softmax_loss.backward(softmax_output, class_targets)

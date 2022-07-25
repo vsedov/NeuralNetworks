@@ -9,8 +9,7 @@ __author__ = "Viv Sedov"
 __email__ = "viv.sb@hotmail.com"
 
 import math
-
-from frosch import hook
+import random
 
 
 def pointer() -> list:
@@ -50,7 +49,12 @@ def softmax() -> list:
 def main() -> None:
     softmax()
 
+    layer_output = [random.randint(1, 10) for _ in range(10)]
+
+    point = [pow(math.e, x) for x in layer_output]
+    final_val = ([x / sum(point) for x in point])
+    print(final_val, sum(final_val))
+
 
 if __name__ == "__main__":
-    hook()
     main()

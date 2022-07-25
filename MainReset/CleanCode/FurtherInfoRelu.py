@@ -8,24 +8,30 @@
 __author__ = "Viv Sedov"
 __email__ = "viv.sb@hotmail.com"
 
-from frosch import hook
+import numpy as np
 from matplotlib import pyplot
 
 
 def plotter() -> pyplot:
     pyplot.style.use("ggplot")
     inputs = [x for x in range(-19, 19)]
-    outputs = list(
-        map(lambda x: max(0.01 * x, x), inputs)
-    )  # and this becomes leaky relu
+    outputs = list(map(lambda x: max(0.01 * x, x),
+                       inputs))  # and this becomes leaky relu
+    pyplot.plot(inputs, outputs)
+    pyplot.show()
+
+
+def plotter_version_2() -> pyplot:
+    pyplot.style.use("ggplot")
+    inputs = [x for x in range(-19, 19)]
+    outputs = list(map(lambda x: 1 / 1 + np.exp(-x), inputs))
     pyplot.plot(inputs, outputs)
     pyplot.show()
 
 
 def main() -> None:
-    plotter()
+    plotter_version_2()
 
 
 if __name__ == "__main__":
-    hook()
     main()

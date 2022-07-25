@@ -8,8 +8,6 @@
 __author__ = "Viv Sedov"
 __email__ = "viv.sv@hotmail.com"
 
-import pyinspect as pi
-
 
 def main() -> None:
     x = [1.0, -2.0, 3.0]
@@ -27,7 +25,7 @@ def main() -> None:
 
     # We have to do relu to the functional
     y = max(z, 0)
-    print("before y ", y)
+    print("before y before back prop -> z =  ", y)
 
     # ----------------------------------------------------------------
     # Doing the backwards pass  Single neuron back prop
@@ -123,5 +121,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    pi.install_traceback()
     main()
