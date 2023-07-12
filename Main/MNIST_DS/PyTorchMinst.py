@@ -51,12 +51,10 @@ def torch_data_set():
     lister = []
     for data in trainset:
         x, y = data  # data has 2 set
-        for i in y:
-            lister.append(int(i))
-
+        lister.extend(int(i) for i in y)
     x = Counter(lister)
     for i in range(len(x)):
-        pp("{} :: {}".format(i, (x[i] / len(lister)) * 100))
+        pp(f"{i} :: {x[i] / len(lister) * 100}")
 
 
 def main() -> None:

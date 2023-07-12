@@ -73,15 +73,15 @@ class DogsVsCats(object):
 
         np.random.shuffle(self.training_data)
         np.save("training_data.npy", self.training_data)
-        print("Cats: {}".format(self.catCount))
+        print(f"Cats: {self.catCount}")
 
-        print("Cats: {}".format(self.dogCount))
+        print(f"Cats: {self.dogCount}")
 
 
 def main() -> None:
     REBUILD_DATA = False
 
-    if REBUILD_DATA == True:
+    if REBUILD_DATA:
         dogs_vs_cats = DogsVsCats()
         dogs_vs_cats.make_training_data()
 

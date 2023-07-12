@@ -56,10 +56,7 @@ class ActivationSoftMax:
 class Loss:
     def calculate(self, output, y):
         sample_losses = self.forward(output, y)
-        # This function above would calculate the loss
-
-        data_loss = np.mean(sample_losses)
-        return data_loss
+        return np.mean(sample_losses)
 
 
 class Loss_CategoricalCrossentropy(Loss):
@@ -75,8 +72,7 @@ class Loss_CategoricalCrossentropy(Loss):
         elif len(y_true.shape) == 2:
             correct_confidence = np.sum(y_pred_clipped * y_true, axis=1)
 
-        cross_entropy = -np.log(correct_confidence)
-        return cross_entropy
+        return -np.log(correct_confidence)
 
 
 def main() -> None:

@@ -51,7 +51,7 @@ def threeNeurons() -> list:
     print("test")
 
     # Note you cant do multi buffer
-    print("{}".format(biases3))
+    print(f"{biases3}")
     # I wanted to see how this code would end up looking like
 
 
@@ -71,11 +71,9 @@ def betterVersionAbove() -> list:
 
     # This splits each neuron weight with bias
     for neuronWeights, neuronBias in zip(weights1, bias):
-        # Zerored output for given neuron
-        neuronOutput = 0
-        # for each input there is an array we linjk too
-        for nInput, weight in zip(inputs, neuronWeights):
-            neuronOutput += nInput * weight
+        neuronOutput = sum(
+            nInput * weight for nInput, weight in zip(inputs, neuronWeights)
+        )
         neuronOutput += neuronBias
         Layers_of_outoputs.append(neuronOutput)
 

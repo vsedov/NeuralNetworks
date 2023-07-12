@@ -15,10 +15,10 @@ from frosch import hook
 
 def f(x):
     x2 = [pow(2 * x, 2) for x in x]
-    container = []
-    for varr in range(1, len(x)):
-        container.append(x2[varr] - x2[varr - 1] / x[varr] - x[varr - 1])
-
+    container = [
+        x2[varr] - x2[varr - 1] / x[varr] - x[varr - 1]
+        for varr in range(1, len(x))
+    ]
     container.append(400)
     container = np.array(container)
     print(x, x2, container, sep="\n")
@@ -51,7 +51,7 @@ def main() -> None:
 
         to_plot = [x1 - 0.9, x1, x1 + 0.9]
         plt.plot(
-            [point for point in to_plot],
+            list(to_plot),
             [approximate_tangent_line(point, diriv) for point in to_plot],
         )
     plt.show()

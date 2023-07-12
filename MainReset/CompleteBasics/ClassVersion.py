@@ -175,13 +175,13 @@ class LossCategoricalCrossEntropy(Loss):
         # Number of samples
 
         samples = len(dvalues)
-        # Number of labels in every sample
-        # We'll use the first sample to count them
-        labels = len(dvalues[0])
-
         # If labels are sparse, turn them into one-hot vector - Len in this case
         # very imporant - Rather jaring that i fucked this part up before
         if len(y_true.shape) == 1:
+            # Number of labels in every sample
+            # We'll use the first sample to count them
+            labels = len(dvalues[0])
+
             y_true = np.eye(labels)[y_true]
 
         # Calculate gradient

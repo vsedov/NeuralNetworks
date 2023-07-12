@@ -48,10 +48,7 @@ class ActivationSoftMax:
 class Loss:
     def calculate(self, output, y):
         sample_losses = self.forward(output, y)
-        # This function above would calculate the loss
-
-        data_loss = np.mean(sample_losses)
-        return data_loss
+        return np.mean(sample_losses)
 
 
 class Loss_CategoricalCrossentropy(Loss):
@@ -67,8 +64,7 @@ class Loss_CategoricalCrossentropy(Loss):
         elif len(y_true.shape) == 2:
             correct_confidence = np.sum(y_pred_clipped * y_true, axis=1)
 
-        cross_entropy = -np.log(correct_confidence)
-        return cross_entropy
+        return -np.log(correct_confidence)
 
 
 def main() -> None:
@@ -177,9 +173,7 @@ def random_optimization():
 
         if loss < lowest_loss:
             print(
-                "New set of weights found within the given iteration {} loss {} acc {} ".format(
-                    iteration, loss, accuracy
-                )
+                f"New set of weights found within the given iteration {iteration} loss {loss} acc {accuracy} "
             )
 
             best_dense1_weights = dense1.weights.copy()
@@ -189,7 +183,7 @@ def random_optimization():
             best_dense2_biases = dense2.biases.copy()
             lowest_lost = loss
 
-            # rever to the previous weight and changes that it had before .
+                    # rever to the previous weight and changes that it had before .
         else:
             dense1.weights = best_dense1_weights.copy()
             dense1.biases = best_dense1_biases.copy()

@@ -74,11 +74,7 @@ class Loss:
         # Calculate sample losses
         sample_losses = self.forward(output, y)
 
-        # Calculate mean loss
-        data_loss = np.mean(sample_losses)
-
-        # Return loss
-        return data_loss
+        return np.mean(sample_losses)
 
 
 # Cross-entropy loss
@@ -103,21 +99,19 @@ class Loss_CategoricalCrossentropy(Loss):
         elif len(y_true.shape) == 2:
             correct_confidences = np.sum(y_pred_clipped * y_true, axis=1)
 
-        # Losses
-        negative_log_likelihoods = -np.log(correct_confidences)
-        return negative_log_likelihoods
+        return -np.log(correct_confidences)
 
     # Backward pass
     def backward(self, dvalues, y_true):
 
         # Number of samples
         samples = len(dvalues)
-        # Number of labels in every sample
-        # We'll use the first sample to count them
-        labels = len(dvalues[0])
-
         # If labels are sparse, turn them into one-hot vector
         if len(y_true.shape) == 1:
+            # Number of labels in every sample
+            # We'll use the first sample to count them
+            labels = len(dvalues[0])
+
             y_true = np.eye(labels)[y_true]
 
         # Calculate gradient

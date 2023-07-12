@@ -48,8 +48,7 @@ class Loss:
             y = np.argmax(y, axis=1)
         #                   Predictions :
         sample = np.argmax(output, axis=1)
-        accuracy = np.mean(sample == y, keepdims=True)
-        return accuracy
+        return np.mean(sample == y, keepdims=True)
 
     def caculate(self, outputs: np.ndarray, y: np.ndarray):
         """
@@ -68,8 +67,7 @@ class Loss:
         Returns : mean loss
         """
         sample_losses = self.forward(outputs, y)
-        data_loss = np.mean(sample_losses)
-        return data_loss
+        return np.mean(sample_losses)
 
 
 # Each main loss function will be using the loss caculation
@@ -98,8 +96,7 @@ class LossCategoricalCrossEntropy(Loss):
         elif len(y_true.shape) == 2:
             correct_confidence = np.sum(y_pred_clipped * y_true, axis=1)
 
-        negative_likehood = -np.log(correct_confidence)
-        return negative_likehood
+        return -np.log(correct_confidence)
 
 
 def graph_view(X: np.ndarray, y: np.ndarray):

@@ -14,7 +14,7 @@ from matplotlib import pyplot
 
 def plotter() -> pyplot:
     pyplot.style.use("ggplot")
-    inputs = [x for x in range(-19, 19)]
+    inputs = list(range(-19, 19))
     outputs = list(map(lambda x: max(0.01 * x, x),
                        inputs))  # and this becomes leaky relu
     pyplot.plot(inputs, outputs)
@@ -23,8 +23,8 @@ def plotter() -> pyplot:
 
 def plotter_version_2() -> pyplot:
     pyplot.style.use("ggplot")
-    inputs = [x for x in range(-19, 19)]
-    outputs = list(map(lambda x: 1 / 1 + np.exp(-x), inputs))
+    inputs = list(range(-19, 19))
+    outputs = list(map(lambda x: 1 + np.exp(-x), inputs))
     pyplot.plot(inputs, outputs)
     pyplot.show()
 
